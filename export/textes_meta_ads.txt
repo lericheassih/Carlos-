@@ -1,18 +1,25 @@
 TEXTES META ADS — Appartements meublés à Totsi, Lomé
 Contact : WhatsApp +228 70 39 05 05
-Bouton conseillé (CTA) : « Envoyer un message WhatsApp » (objectif Messages ou Engagement > WhatsApp)
+Bouton (CTA) : « Envoyer un message WhatsApp » (objectif Messages ou Engagement > WhatsApp)
 Placements : fichier 9:16 pour Reels et Stories, fichier 4:5 pour les fils Facebook et Instagram.
+Astuce : Meta accepte jusqu'à 5 textes principaux et 5 titres par publicité. Collez la version A et
+la version B : Meta montrera automatiquement la combinaison qui marche le mieux.
+Description (champ optionnel, identique pour les 3) : Réservez sur WhatsApp avec vos dates
 
 ======================================================================
 VIDÉO 1 — « Séjour pro »
 Fichiers : video1_pro_9x16.mp4 / video1_pro_4x5.mp4 / thumbnail1.jpg
 ----------------------------------------------------------------------
-Titre :
-Votre appartement pro à Lomé
-
-Texte principal :
+TEXTE PRINCIPAL (A) :
 En mission à Lomé ? Appartement meublé à Totsi : wifi rapide, clim, sécurité 24h, groupe électrogène.
 65 000 FCFA / nuit. Réservez sur WhatsApp au +228 70 39 05 05.
+
+TEXTE PRINCIPAL (B) :
+Mission, formation ou conférence à Lomé ? Posez vos valises dans un appartement meublé, calme et sécurisé à Totsi.
+65 000 FCFA / nuit. Envoyez vos dates sur WhatsApp : +228 70 39 05 05.
+
+TITRE (A) : Votre appartement pro à Lomé
+TITRE (B) : Wifi, clim, sécurité : travaillez sereinement
 
 Cible conseillée :
 - Âge : 28-60 ans
@@ -24,12 +31,16 @@ Cible conseillée :
 VIDÉO 2 — « Retour au pays »
 Fichiers : video2_diaspora_9x16.mp4 / video2_diaspora_4x5.mp4 / thumbnail2.jpg
 ----------------------------------------------------------------------
-Titre :
-Les fêtes au pays, comme chez vous
-
-Texte principal :
+TEXTE PRINCIPAL (A) :
 Vous rentrez à Lomé pour les fêtes ? Appartement tout équipé à Totsi : salon, cuisine, chambres climatisées.
 65 000 FCFA / nuit. Écrivez-nous sur WhatsApp au +228 70 39 05 05 avec vos dates.
+
+TEXTE PRINCIPAL (B) :
+Cette année, offrez-vous plus que l'hôtel 🏡 Un appartement tout équipé à Totsi pour vous retrouver en famille et cuisiner les plats du pays.
+65 000 FCFA / nuit. Réservez tôt pour les fêtes : WhatsApp +228 70 39 05 05.
+
+TITRE (A) : Les fêtes au pays, comme chez vous
+TITRE (B) : Rentrez au pays, logez en famille
 
 Cible conseillée :
 - Âge : 25-55 ans
@@ -42,12 +53,16 @@ Cible conseillée :
 VIDÉO 3 — « Escapade / Prix choc »
 Fichiers : video3_escapade_9x16.mp4 / video3_escapade_4x5.mp4 / thumbnail3.jpg
 ----------------------------------------------------------------------
-Titre :
-Escapade à Lomé : 65 000 FCFA/nuit
-
-Texte principal :
+TEXTE PRINCIPAL (A) :
 Un appartement moderne et tout équipé à Totsi, Lomé, pour 65 000 FCFA / nuit 😍
 Idéal pour un week-end à deux. Réservez sur WhatsApp : +228 70 39 05 05.
+
+TEXTE PRINCIPAL (B) :
+Envie de changer d'air ce week-end ? 💙 Appartement design, propre et climatisé à Totsi, Lomé.
+65 000 FCFA / nuit. Écrivez-nous vos dates sur WhatsApp : +228 70 39 05 05.
+
+TITRE (A) : Escapade à Lomé : 65 000 FCFA/nuit
+TITRE (B) : Week-end à deux à Totsi, Lomé
 
 Cible conseillée :
 - Âge : 22-45 ans
