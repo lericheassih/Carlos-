@@ -25,7 +25,7 @@ export function Select({ className, children, ...props }: React.SelectHTMLAttrib
 export function MoneyInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div className="relative">
-      <input type="number" inputMode="numeric" min={0} step={500} className={cn("input pr-16 tabular-nums", className)} {...props} />
+      <input type="number" inputMode="numeric" min={0} step="any" className={cn("input pr-16 tabular-nums", className)} {...props} />
       <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs font-medium text-muted">FCFA</span>
     </div>
   );

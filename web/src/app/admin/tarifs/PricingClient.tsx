@@ -39,7 +39,7 @@ function PriceRow({ r }: { r: Row }) {
     const res = await quickUpdatePricing(r.id, { price_night: Number(v.price_night), price_week: n(v.price_week), price_month: n(v.price_month), promo_price_night: n(v.promo_price_night), min_nights: Number(v.min_nights) }, publish);
     if (!res.ok) toast.error(res.error); else { toast(res.message ?? "Enregistré."); router.refresh(); }
   });
-  const inp = (k: keyof typeof v, w = "w-28") => <input className={`input ${w} tabular-nums`} type="number" min={0} step={k === "min_nights" ? 1 : 500} value={v[k]} onChange={(e) => setV({ ...v, [k]: e.target.value })} aria-label={k} />;
+  const inp = (k: keyof typeof v, w = "w-28") => <input className={`input ${w} tabular-nums`} type="number" min={0} step={k === "min_nights" ? 1 : "any"} value={v[k]} onChange={(e) => setV({ ...v, [k]: e.target.value })} aria-label={k} />;
   const outdated = r.status === "published" && r.published_price !== null && r.published_price !== r.price_night;
   return (
     <tr>
