@@ -24,7 +24,7 @@ import {
 
 type Amenity = { id: string; name: string; icon: string; category: string };
 type EditorMedia = { media_id: string; kind: "image" | "video"; url: string; name: string; is_cover: boolean; caption: string; room?: string };
-const ROOMS = ["Salon", "Salle à manger", "Cuisine entière", "Chambre 1", "Chambre 2", "Chambre 3", "Chambre 4", "Salle de bain", "Salle de bain 2", "Toilettes", "Espace de travail", "Extérieur", "Jardin", "Terrasse", "Photos supplémentaires"];
+const ROOMS = ["Salon", "Salle à manger", "Cuisine entière", "Chambre 1", "Chambre 2", "Chambre 3", "Chambre 4", "Salle de bain", "Salle de bain 2", "Toilettes", "Espace de travail", "Entrée", "Couloir", "Balcon", "Terrasse", "Jardin", "Extérieur", "Photos supplémentaires"];
 
 type FormState = {
   name: string; slug: string; short_description: string; description: string; city: string; neighborhood: string; address: string;

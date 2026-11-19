@@ -25,6 +25,20 @@ values
   E'Arrivée entre 14:00 et 16:00\nSéjour de 2 nuits minimum')
 on conflict (slug) do nothing;
 
+insert into public.apartments (slug, name, status, short_description, description, city, neighborhood, property_type,
+  bedrooms, living_rooms, bathrooms, max_guests, price_night, min_nights, check_in_time, check_out_time, house_rules)
+values ('appartement-1-chambre-salon-agoe-2-lions', 'Appartement 1 chambre salon, Agoè 2 Lions', 'draft',
+  'Appartement meublé d''une chambre avec salon lumineux, coin repas, cuisine équipée et balcon, dans un immeuble récent d''Agoè 2 Lions.',
+  E'Un appartement meublé au design soigné : salon lumineux avec canapé, fauteuil et télévision écran plat, coin repas pour quatre personnes et grands rideaux voilés.\n\nLa chambre climatisée dispose d''un grand lit, d''une armoire et d''un miroir sur pied. Cuisine équipée (plaques de cuisson au gaz, micro-ondes, réfrigérateur) et salle de douche moderne.\n\nBalcon privatif avec vue dégagée, dans un immeuble récent et bien entretenu du quartier d''Agoè 2 Lions.',
+  'Lomé', 'Agoè 2 Lions', 'appartement', 1, 1, 1, 2, 50000, 2, '14:00', '13:00', E'Arrivée entre 14:00 et 16:00\nSéjour de 2 nuits minimum')
+on conflict (slug) do nothing;
+
+insert into public.apartment_amenities (apartment_id, amenity_id, included)
+select a.id, m.id, true from public.apartments a
+join public.amenities m on m.name in ('Wifi','Climatisation','Télévision','Cuisine équipée','Réfrigérateur','Micro-ondes','Cuisinière à gaz','Eau chaude','Balcon')
+where a.slug = 'appartement-1-chambre-salon-agoe-2-lions'
+on conflict do nothing;
+
 -- Équipements repris de vos annonces actuelles (inclus), et éléments affichés « non inclus »
 insert into public.apartment_amenities (apartment_id, amenity_id, included)
 select a.id, m.id, true from public.apartments a
