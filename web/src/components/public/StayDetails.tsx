@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ClipboardList, DoorOpen, Grid2x2, CalendarX, ShieldCheck, X } from "lucide-react";
 import type { PublicAmenity, PublicMedia } from "@/lib/types";
 import { AmenityIcon } from "@/components/AmenityIcon";
+import { ZoomViewer } from "./ZoomViewer";
 
 /* ---------- Feuille plein écran (mobile) / fenêtre (ordinateur) ---------- */
 export function Sheet({ open, onClose, title, children, wide, footer }: {
@@ -69,12 +70,13 @@ function Mosaic({ items, name, onOpen }: { items: PublicMedia[]; name: string; o
 
 export function PhotoGallery({ images, name }: { images: PublicMedia[]; name: string }) {
   const [tour, setTour] = useState(false);
-  const [zoom, setZoom] = useState<number | null>(null);
+  const [zoom, setZoom] = useState<{ list: PublicMedia[]; i: number } | null>(null);
   const [idx, setIdx] = useState(0);
   const rooms = useMemo(() => groupByRoom(images), [images]);
   const ordered = useMemo(() => rooms.flatMap(([, l]) => l), [rooms]);
   const sec = useRef<Record<string, HTMLElement | null>>({});
-  const openAt = (m: PublicMedia) => setZoom(ordered.findIndex((x) => x.id === m.id));
+  const openAt = (m: PublicMedia) => setZoom({ list: ordered, i: Math.max(0, ordered.findIndex((x) => x.id === m.id)) });
+  const openPhoto = (k: number) => setZoom({ list: images, i: k });
 
   if (!images.length) return <div className="grid aspect-[16/9] place-items-center rounded-xl bg-slate-100 text-slate-400">Photos bientôt disponibles</div>;
   const five = images.slice(0, 5);
@@ -85,16 +87,17 @@ export function PhotoGallery({ images, name }: { images: PublicMedia[]; name: st
       <div className="relative -mx-4 sm:hidden">
         <div className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]" onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}>
           {images.map((m, i) => (
-            <button key={m.id} className="relative aspect-[4/3] w-full shrink-0 snap-center" onClick={() => setTour(true)} aria-label={`Photo ${i + 1}`}>
+            <button key={m.id} className="relative aspect-[4/3] w-full shrink-0 snap-center" onClick={() => openPhoto(i)} aria-label={`Photo ${i + 1}`}>
               <Image src={m.url} alt={m.alt || name} fill sizes="100vw" priority={i === 0} className="object-cover" />
             </button>
           ))}
         </div>
         <span className="absolute bottom-3 right-3 rounded-md bg-black/60 px-2 py-0.5 text-xs tabular-nums text-white">{idx + 1} / {images.length}</span>
+        <button onClick={() => setTour(true)} className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold shadow-sm"><Grid2x2 className="size-3.5" /> Visite photo</button>
       </div>
       <div className="relative hidden h-[440px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl sm:grid">
         {five.map((m, i) => (
-          <button key={m.id} onClick={() => setTour(true)} className={`relative overflow-hidden bg-slate-100 ${tile(i, five.length)}`}>
+          <button key={m.id} onClick={() => openPhoto(i)} aria-label={`Agrandir la photo ${i + 1}`} className={`relative cursor-zoom-in overflow-hidden bg-slate-100 ${tile(i, five.length)}`}>
             <Image src={m.url} alt={m.alt || name} fill sizes={i === 0 ? "50vw" : "25vw"} priority={i === 0} className="object-cover transition hover:brightness-90" />
           </button>
         ))}
@@ -135,20 +138,7 @@ export function PhotoGallery({ images, name }: { images: PublicMedia[]; name: st
         </div>
       )}
 
-      {zoom !== null && ordered[zoom] && (
-        <div className="fixed inset-0 z-[60] flex flex-col bg-black text-white" role="dialog" aria-modal="true">
-          <div className="flex items-center justify-between px-4 py-3">
-            <button onClick={() => setZoom(null)} className="grid size-10 place-items-center rounded-full hover:bg-white/10" aria-label="Fermer"><X className="size-5" /></button>
-            <span className="text-sm tabular-nums">{zoom + 1} / {ordered.length}</span>
-            <span className="w-10" />
-          </div>
-          <div className="relative flex-1">
-            <Image src={ordered[zoom].url} alt={ordered[zoom].alt || name} fill sizes="100vw" className="object-contain" />
-            <button onClick={() => setZoom((zoom - 1 + ordered.length) % ordered.length)} className="absolute left-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/40 hover:bg-white/10" aria-label="Précédente"><ChevronLeft /></button>
-            <button onClick={() => setZoom((zoom + 1) % ordered.length)} className="absolute right-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/40 hover:bg-white/10" aria-label="Suivante"><ChevronRight /></button>
-          </div>
-        </div>
-      )}
+      {zoom && <ZoomViewer images={zoom.list} index={zoom.i} onClose={() => setZoom(null)} />}
     </>
   );
 }

@@ -17,8 +17,8 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-slate-900">
-        {hero && <Image src={hero} alt="" fill priority sizes="100vw" className="-z-10 object-cover opacity-60" />}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-slate-900/40" />
+        {hero && <Image src={hero} alt="" fill priority sizes="100vw" className="-z-10 object-cover" />}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/75 via-black/25 to-black/10" />
         <div className="mx-auto flex min-h-[78svh] max-w-6xl flex-col justify-end px-4 pb-14 pt-28 sm:px-6 sm:pb-20">
           <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.08] text-white sm:text-6xl">{s.hero_title}</h1>
           {s.hero_subtitle && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-200">{s.hero_subtitle}</p>}
@@ -34,11 +34,11 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
           {/* Recherche rapide */}
           <form action="/appartements" className="mt-10 grid max-w-3xl gap-2 rounded-2xl bg-white/95 p-2 shadow-2xl backdrop-blur sm:grid-cols-[1fr_1fr_120px_auto]">
             <label className="rounded-xl px-3 py-2 hover:bg-slate-50"><span className="block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Arrivée</span>
-              <input type="date" name="arrivee" min={today} className="w-full bg-transparent text-sm outline-none" /></label>
+              <input type="date" name="arrivee" min={today} className="block min-h-6 w-full appearance-none bg-transparent text-sm outline-none [&::-webkit-date-and-time-value]:text-left" /></label>
             <label className="rounded-xl px-3 py-2 hover:bg-slate-50"><span className="block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Départ</span>
-              <input type="date" name="depart" min={today} className="w-full bg-transparent text-sm outline-none" /></label>
+              <input type="date" name="depart" min={today} className="block min-h-6 w-full appearance-none bg-transparent text-sm outline-none [&::-webkit-date-and-time-value]:text-left" /></label>
             <label className="rounded-xl px-3 py-2 hover:bg-slate-50"><span className="block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Personnes</span>
-              <input type="number" name="voyageurs" min={1} max={30} placeholder="2" className="w-full bg-transparent text-sm outline-none" /></label>
+              <input type="number" name="voyageurs" min={1} max={30} placeholder="2" className="block min-h-6 w-full appearance-none bg-transparent text-sm outline-none [&::-webkit-date-and-time-value]:text-left" /></label>
             <button className="rounded-xl bg-[var(--site-primary)] px-6 py-3 text-sm font-semibold text-white">Rechercher</button>
           </form>
         </div>
