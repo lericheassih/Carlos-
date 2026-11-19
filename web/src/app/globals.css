@@ -43,3 +43,21 @@ body { font-family: var(--font-sans); color: var(--color-ink); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Site public : typographie et neutres inspirés des plateformes de location (texte #222, gris #6a6a6a, bordures #ddd) */
+.site {
+  font-family: var(--font-display);
+  color: #222222;
+  --color-slate-900: #222222;
+  --color-slate-800: #222222;
+  --color-slate-700: #222222;
+  --color-slate-600: #6a6a6a;
+  --color-slate-500: #6a6a6a;
+  --color-slate-400: #929292;
+  --color-slate-300: #b0b0b0;
+  --color-slate-200: #dddddd;
+  --color-slate-100: #f7f7f7;
+  --color-slate-50: #f7f7f7;
+  letter-spacing: -0.005em;
+}
+.site h1, .site h2, .site h3 { letter-spacing: -0.02em; }

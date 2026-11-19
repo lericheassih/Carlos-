@@ -22,9 +22,10 @@ export type PublicMedia = {
   width: number | null;
   height: number | null;
   is_cover: boolean;
+  room?: string;
 };
 
-export type PublicAmenity = { id: string; name: string; icon: string; category: string };
+export type PublicAmenity = { id: string; name: string; icon: string; category: string; description?: string; included?: boolean };
 
 /** Instantané publié d'un appartement : c'est ce que voit le site public. */
 export type ApartmentSnapshot = {

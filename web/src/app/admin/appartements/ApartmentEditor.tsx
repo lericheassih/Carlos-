@@ -23,7 +23,8 @@ import {
 } from "./actions";
 
 type Amenity = { id: string; name: string; icon: string; category: string };
-type EditorMedia = { media_id: string; kind: "image" | "video"; url: string; name: string; is_cover: boolean; caption: string };
+type EditorMedia = { media_id: string; kind: "image" | "video"; url: string; name: string; is_cover: boolean; caption: string; room?: string };
+const ROOMS = ["Salon", "Salle à manger", "Cuisine entière", "Chambre 1", "Chambre 2", "Chambre 3", "Chambre 4", "Salle de bain", "Salle de bain 2", "Toilettes", "Espace de travail", "Extérieur", "Jardin", "Terrasse", "Photos supplémentaires"];
 
 type FormState = {
   name: string; slug: string; short_description: string; description: string; city: string; neighborhood: string; address: string;
@@ -48,8 +49,8 @@ function initial(a: ApartmentRow | null): FormState {
   };
 }
 
-export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAmenities, media: initialMedia, hasUnpublishedChanges, defaultMinNights }: {
-  apartment: ApartmentRow | null; amenities: Amenity[]; selectedAmenities: string[]; media: EditorMedia[]; hasUnpublishedChanges: boolean; defaultMinNights: number;
+export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAmenities, excludedAmenities = [], media: initialMedia, hasUnpublishedChanges, defaultMinNights }: {
+  apartment: ApartmentRow | null; amenities: Amenity[]; selectedAmenities: string[]; excludedAmenities?: string[]; media: EditorMedia[]; hasUnpublishedChanges: boolean; defaultMinNights: number;
 }) {
   const router = useRouter();
   const [f, setF] = useState<FormState>(() => {
@@ -59,6 +60,7 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
   });
   const [amenities, setAmenities] = useState(allAmenities);
   const [amSel, setAmSel] = useState<string[]>(selectedAmenities);
+  const [amExcl, setAmExcl] = useState<string[]>(excludedAmenities);
   const [media, setMedia] = useState<EditorMedia[]>(initialMedia);
   const [dirty, setDirty] = useState(!apartment);
   const [busy, setBusy] = useState<string | null>(null);
@@ -92,7 +94,8 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
     slug: f.slug || slugify(f.name),
     promo_label: f.promo_label || null,
     amenity_ids: amSel,
-    media: media.map((m) => ({ media_id: m.media_id, is_cover: m.is_cover, caption: m.caption })),
+    excluded_amenity_ids: amExcl.filter((x) => !amSel.includes(x)),
+    media: media.map((m) => ({ media_id: m.media_id, is_cover: m.is_cover, caption: m.caption, room: m.room ?? "" })),
   });
 
   async function save(): Promise<string | null> {
@@ -310,7 +313,7 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
 
           {/* D. Photos et vidéos */}
           <Card>
-            <CardHeader title="Photos et vidéos" description="Glissez pour réordonner. L'étoile définit la photo principale."
+            <CardHeader title="Photos et vidéos" description="Glissez pour réordonner. L'étoile définit la photo principale. Indiquez la pièce : le site crée une « Visite photo » pièce par pièce."
               actions={<>
                 <Button size="sm" onClick={() => setPicker(true)}><ImagePlus className="size-4" /> Galerie</Button>
                 <Button size="sm" variant="primary" onClick={() => fileInput.current?.click()} loading={!!uploading}><Upload className="size-4" /> {uploading ? `Envoi ${uploading}` : "Importer"}</Button>
@@ -355,6 +358,11 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
                         <IconBtn label="Avancer" onClick={() => move(i, i - 1)}><ArrowUp className="size-4" /></IconBtn>
                         <IconBtn label="Reculer" onClick={() => move(i, i + 1)}><ArrowDown className="size-4" /></IconBtn>
                       </div>
+                      <select aria-label="Pièce" value={m.room ?? ""} onChange={(e) => { const v = e.target.value; setMedia((l) => l.map((x) => (x.media_id === m.media_id ? { ...x, room: v } : x))); setDirty(true); }}
+                        className="block w-full border-0 border-t border-line bg-white px-2 py-1.5 text-xs text-slate-700 focus:outline-none">
+                        <option value="">Pièce : non précisée</option>
+                        {ROOMS.map((r) => <option key={r} value={r}>{r}</option>)}
+                      </select>
                     </div>
                   ))}
                 </div>
@@ -424,26 +432,33 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
 
           {/* C. Équipements */}
           <Card>
-            <CardHeader title="Équipements" description={`${amSel.length} sélectionné(s)`} />
+            <CardHeader title="Équipements" description={`${amSel.length} inclus · ${amExcl.filter((x) => !amSel.includes(x)).length} non inclus`} />
             <CardBody className="space-y-4">
               {amenityGroups.map(([cat, list]) => (
                 <div key={cat}>
                   <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">{cat}</div>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
                     {list.map((a) => {
-                      const on = amSel.includes(a.id);
+                      const on = amSel.includes(a.id), off = !on && amExcl.includes(a.id);
                       return (
-                        <label key={a.id} className={cn("flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2 text-sm transition", on ? "border-brand-500 bg-brand-50/60" : "border-line hover:bg-slate-50")}>
-                          <input type="checkbox" className="size-4 accent-brand-600" checked={on}
-                            onChange={() => { setAmSel((s) => (on ? s.filter((x) => x !== a.id) : [...s, a.id])); setDirty(true); }} />
-                          <AmenityIcon name={a.icon} className="size-4 text-slate-500" />
-                          <span className="truncate">{a.name}</span>
-                        </label>
+                        <div key={a.id} className={cn("flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition", on ? "border-brand-500 bg-brand-50/60" : off ? "border-red-200 bg-red-50/50" : "border-line hover:bg-slate-50")}>
+                          <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5">
+                            <input type="checkbox" className="size-4 accent-brand-600" checked={on}
+                              onChange={() => { setAmSel((s) => (on ? s.filter((x) => x !== a.id) : [...s, a.id])); setAmExcl((s) => s.filter((x) => x !== a.id)); setDirty(true); }} />
+                            <AmenityIcon name={a.icon} className="size-4 shrink-0 text-slate-500" />
+                            <span className={cn("truncate", off && "text-red-700 line-through")}>{a.name}</span>
+                          </label>
+                          {!on && (
+                            <button type="button" title="Afficher comme « non inclus » (barré) sur le site" onClick={() => { setAmExcl((s) => (off ? s.filter((x) => x !== a.id) : [...s, a.id])); setDirty(true); }}
+                              className={cn("shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium", off ? "bg-red-600 text-white" : "text-muted hover:bg-slate-200")}>Non inclus</button>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
                 </div>
               ))}
+              <p className="text-xs text-muted">Cochez ce qui est disponible. « Non inclus » affiche l&apos;élément barré sur le site (ex. détecteur de fumée), comme sur les grandes plateformes.</p>
               <div className="flex gap-2 border-t border-line pt-4">
                 <Input placeholder="Nouvel équipement (ex. Fer à repasser)" value={newAmenity} onChange={(e) => setNewAmenity(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addAmenity(); } }} />

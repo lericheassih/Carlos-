@@ -15,7 +15,7 @@ export default async function PreviewApartment({ params }: { params: Promise<{ i
   const { data: ws } = await supabase.from("website_settings").select("published").eq("id", 1).maybeSingle();
   const s = normalizeSettings(ws?.published);
   return (
-    <div style={siteStyle(s)} className="min-h-dvh bg-white text-slate-900">
+    <div style={siteStyle(s)} className="site min-h-dvh bg-white text-slate-900">
       <PreviewBanner back={`/admin/appartements/${id}`} text="version enregistrée, pas encore forcément publiée. Les visiteurs ne voient pas cette page." />
       <SiteHeader s={s} />
       <ApartmentView a={built.snapshot} s={s} reviews={[]} preview />

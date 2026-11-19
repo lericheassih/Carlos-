@@ -12,7 +12,7 @@ export default async function PreviewSite() {
   const s = normalizeSettings(data?.draft);
   const [apartments, reviews] = await Promise.all([getApartments(), getReviews()]);
   return (
-    <div style={siteStyle(s)} className="min-h-dvh bg-white text-slate-900">
+    <div style={siteStyle(s)} className="site min-h-dvh bg-white text-slate-900">
       <PreviewBanner back="/admin/site" text="brouillon de personnalisation (non publié)." />
       <SiteHeader s={s} />
       <HomeView s={s} apartments={apartments} reviews={reviews} />

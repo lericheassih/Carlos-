@@ -25,7 +25,7 @@ export async function saveApartment(id: string | null, raw: unknown): Promise<Ac
   await requireAdmin();
   const parsed = ApartmentInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Données invalides." };
-  const { amenity_ids, media, slug, ...fields } = parsed.data;
+  const { amenity_ids, excluded_amenity_ids, media, slug, ...fields } = parsed.data;
   const supabase = await createClient();
 
   const finalSlug = await uniqueSlug(supabase, slug || fields.name, id);
@@ -44,8 +44,13 @@ export async function saveApartment(id: string | null, raw: unknown): Promise<Ac
   // Équipements
   const { error: e1 } = await supabase.from("apartment_amenities").delete().eq("apartment_id", aptId);
   if (e1) return { ok: false, error: pgError(e1) };
-  if (amenity_ids.length) {
-    const { error } = await supabase.from("apartment_amenities").insert([...new Set(amenity_ids)].map((amenity_id) => ({ apartment_id: aptId, amenity_id })));
+  const inc = [...new Set(amenity_ids)];
+  const exc = [...new Set(excluded_amenity_ids)].filter((x) => !inc.includes(x));
+  if (inc.length || exc.length) {
+    const { error } = await supabase.from("apartment_amenities").insert([
+      ...inc.map((amenity_id) => ({ apartment_id: aptId, amenity_id, included: true })),
+      ...exc.map((amenity_id) => ({ apartment_id: aptId, amenity_id, included: false })),
+    ]);
     if (error) return { ok: false, error: pgError(error) };
   }
 
@@ -58,7 +63,7 @@ export async function saveApartment(id: string | null, raw: unknown): Promise<Ac
   const rows = list.map((m, i) => {
     const cover = m.is_cover && !coverSet;
     if (cover) coverSet = true;
-    return { apartment_id: aptId, media_id: m.media_id, position: i, is_cover: cover, caption: m.caption };
+    return { apartment_id: aptId, media_id: m.media_id, position: i, is_cover: cover, caption: m.caption, room: m.room };
   });
   if (rows.length && !coverSet) rows[0]!.is_cover = true;
   if (rows.length) {
@@ -113,8 +118,8 @@ export async function duplicateApartment(id: string): Promise<ActionResult<{ id:
     .insert({ ...rest, name: `${name} (copie)`, slug: newSlug, status: "draft", featured: false }).select("id").single();
   if (error) return { ok: false, error: pgError(error) };
   const [{ data: am }, { data: md }] = await Promise.all([
-    supabase.from("apartment_amenities").select("amenity_id").eq("apartment_id", id),
-    supabase.from("apartment_media").select("media_id, position, is_cover, caption").eq("apartment_id", id),
+    supabase.from("apartment_amenities").select("amenity_id, included").eq("apartment_id", id),
+    supabase.from("apartment_media").select("media_id, position, is_cover, caption, room").eq("apartment_id", id),
   ]);
   if (am?.length) await supabase.from("apartment_amenities").insert(am.map((a) => ({ ...a, apartment_id: created.id })));
   if (md?.length) await supabase.from("apartment_media").insert(md.map((m) => ({ ...m, apartment_id: created.id })));

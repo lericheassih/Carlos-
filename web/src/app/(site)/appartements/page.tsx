@@ -27,7 +27,7 @@ export default async function Catalog({ searchParams }: { searchParams: Promise<
     if (sp.quartier && a.neighborhood !== sp.quartier) return false;
     if (rooms && a.bedrooms < rooms) return false;
     if (guests && a.max_guests < guests) return false;
-    if (eq.length && !eq.every((id) => a.amenities.some((x) => x.id === id))) return false;
+    if (eq.length && !eq.every((id) => a.amenities.some((x) => x.id === id && x.included !== false))) return false;
     if (free && !free.has(a.id)) return false;
     return true;
   });
@@ -35,7 +35,7 @@ export default async function Catalog({ searchParams }: { searchParams: Promise<
   if (sp.tri === "prix_desc") list = [...list].sort((x, y) => displayNightPrice(y.pricing, today).price - displayNightPrice(x.pricing, today).price);
 
   const neighborhoods = [...new Set(all.map((a) => a.neighborhood).filter(Boolean))].sort();
-  const amenities = [...new Map(all.flatMap((a) => a.amenities).map((x) => [x.id, x])).values()].sort((a, b) => a.name.localeCompare(b.name));
+  const amenities = [...new Map(all.flatMap((a) => a.amenities.filter((x) => x.included !== false)).map((x) => [x.id, x])).values()].sort((a, b) => a.name.localeCompare(b.name));
   const active = Boolean(min || max || sp.quartier || rooms || guests || eq.length || hasDates);
   const q = new URLSearchParams();
   if (hasDates) { q.set("arrivee", sp.arrivee!); q.set("depart", sp.depart!); }
@@ -102,7 +102,7 @@ export default async function Catalog({ searchParams }: { searchParams: Promise<
           {all.length > 0 && <Link href="/appartements" className="mt-2 inline-block text-sm text-[var(--site-primary)] hover:underline">Voir tous les appartements</Link>}
         </div>
       ) : (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((a, i) => <ApartmentCard key={a.id} a={a} priority={i < 3} query={carry} />)}
         </div>
       )}

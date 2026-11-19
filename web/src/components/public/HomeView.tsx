@@ -56,7 +56,7 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
         {featured.length === 0 ? (
           <p className="mt-8 rounded-2xl border border-dashed border-slate-300 p-10 text-center text-slate-600">Nos appartements seront bientôt en ligne. Contactez-nous sur WhatsApp en attendant.</p>
         ) : (
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{featured.map((a, i) => <ApartmentCard key={a.id} a={a} priority={i === 0} />)}</div>
+          <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">{featured.map((a, i) => <ApartmentCard key={a.id} a={a} priority={i === 0} />)}</div>
         )}
       </section>
 

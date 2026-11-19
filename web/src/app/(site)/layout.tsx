@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const s = await getSettings();
   return (
-    <div style={siteStyle(s)} className="min-h-dvh bg-white text-slate-900">
+    <div style={siteStyle(s)} className="site min-h-dvh bg-white text-slate-900">
       <SiteHeader s={s} />
       <main>{children}</main>
       <SiteFooter s={s} />

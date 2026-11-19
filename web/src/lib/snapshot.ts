@@ -8,26 +8,26 @@ import { mediaUrl } from "./media";
 export async function buildSnapshot(supabase: SupabaseClient, id: string): Promise<{ row: ApartmentRow; snapshot: ApartmentSnapshot } | null> {
   const [{ data: row }, { data: am }, { data: md }] = await Promise.all([
     supabase.from("apartments").select("*").eq("id", id).maybeSingle(),
-    supabase.from("apartment_amenities").select("amenity:amenities(id,name,icon,category,sort_order)").eq("apartment_id", id),
+    supabase.from("apartment_amenities").select("included, amenity:amenities(id,name,icon,category,description,sort_order)").eq("apartment_id", id),
     supabase
       .from("apartment_media")
-      .select("position,is_cover,caption,media:media(id,kind,storage_path,alt,width,height,name)")
+      .select("position,is_cover,caption,room,media:media(id,kind,storage_path,alt,width,height,name)")
       .eq("apartment_id", id)
       .order("position"),
   ]);
   if (!row) return null;
   const a = row as ApartmentRow;
 
-  type AmJoin = { amenity: { id: string; name: string; icon: string; category: string; sort_order: number } | null };
+  type AmJoin = { included: boolean; amenity: { id: string; name: string; icon: string; category: string; description: string; sort_order: number } | null };
   type MdJoin = {
-    position: number; is_cover: boolean; caption: string;
+    position: number; is_cover: boolean; caption: string; room: string;
     media: { id: string; kind: "image" | "video"; storage_path: string; alt: string; width: number | null; height: number | null; name: string } | null;
   };
   const amenities = ((am ?? []) as unknown as AmJoin[])
-    .map((x) => x.amenity)
-    .filter((x): x is NonNullable<AmJoin["amenity"]> => !!x)
+    .filter((x) => x.amenity)
+    .map((x) => ({ ...x.amenity!, included: x.included !== false }))
     .sort((x, y) => x.sort_order - y.sort_order || x.name.localeCompare(y.name))
-    .map(({ id, name, icon, category }) => ({ id, name, icon, category }));
+    .map(({ id, name, icon, category, description, included }) => ({ id, name, icon, category, description, included }));
 
   let media = ((md ?? []) as unknown as MdJoin[])
     .filter((x) => x.media)
@@ -39,6 +39,7 @@ export async function buildSnapshot(supabase: SupabaseClient, id: string): Promi
       width: x.media!.width,
       height: x.media!.height,
       is_cover: x.is_cover,
+      room: x.room || "",
     }));
   // La photo principale passe en tête
   media = [...media.filter((m) => m.is_cover), ...media.filter((m) => !m.is_cover)];

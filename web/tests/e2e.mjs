@@ -56,7 +56,7 @@ await page.fill("#bedrooms", "2");
 await page.fill("#max_guests", "4");
 await page.fill("#pn", "65000");
 await page.fill("#pw", "400000");
-await page.locator("label", { hasText: "Wi-Fi" }).locator("input").check();
+await page.locator("label", { hasText: "Wifi" }).locator("input").check();
 await page.locator("label", { hasText: "Climatisation" }).locator("input").check();
 if (PHOTOS) {
   const files = readdirSync(PHOTOS).filter((f) => /\.jpe?g$/i.test(f)).slice(0, 4).map((f) => path.join(PHOTOS, f));
@@ -77,9 +77,9 @@ let card = pub.locator("a", { hasText: name });
 ok("L'appartement apparaît dans le catalogue public", await card.count() > 0);
 ok("Prix public = 65 000 FCFA", (await card.first().textContent()).includes("65 000 FCFA"));
 await card.first().click();
-await pub.waitForURL(/\/appartements\/.+/, { waitUntil: "commit" }); await pub.waitForSelector("h1");
+await pub.waitForURL(/\/appartements\/.+/, { waitUntil: "commit" }); await pub.waitForSelector("h1 >> visible=true");
 const publicUrl = pub.url().split("?")[0];
-ok("Page individuelle de l'appartement", (await pub.textContent("h1")).includes(name));
+ok("Page individuelle de l'appartement", (await pub.locator("h1 >> visible=true").textContent()).includes(name));
 if (PHOTOS) ok("Photos affichées sur le site public", (await pub.locator("img[src*='storage'], img[src*='_next/image']").count()) > 0);
 
 // Modification du prix : enregistrer SANS publier → le site ne change pas

@@ -36,7 +36,8 @@ export const ApartmentInput = z.object({
   check_out_time: z.string().max(20).default("12:00"),
   featured: z.boolean().default(false),
   amenity_ids: z.array(z.string().uuid()).max(200).default([]),
-  media: z.array(z.object({ media_id: z.string().uuid(), is_cover: z.boolean(), caption: z.string().max(200).default("") })).max(200).default([]),
+  excluded_amenity_ids: z.array(z.string().uuid()).max(200).default([]),
+  media: z.array(z.object({ media_id: z.string().uuid(), is_cover: z.boolean(), caption: z.string().max(200).default(""), room: z.string().max(60).default("") })).max(200).default([]),
 }).superRefine((v, ctx) => {
   if (v.promo_start && v.promo_end && v.promo_end < v.promo_start) ctx.addIssue({ code: "custom", message: "La fin de promotion doit suivre son début.", path: ["promo_end"] });
   if (v.promo_price_night !== null && v.promo_price_night >= v.price_night && v.price_night > 0) ctx.addIssue({ code: "custom", message: "Le tarif promotionnel doit être inférieur au prix par nuit.", path: ["promo_price_night"] });

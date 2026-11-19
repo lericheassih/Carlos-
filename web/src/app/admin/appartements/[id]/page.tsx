@@ -26,7 +26,7 @@ export default async function EditApartment({ params }: { params: Promise<{ id: 
   return (
     <>
       <PageHeader title={built.row.name} back="/admin/appartements" badge={<AptStatus s={built.row.status} />} description={built.row.reference} />
-      <ApartmentEditor key={built.row.updated_at} apartment={built.row} amenities={d.amenities} selectedAmenities={d.selected} media={d.media}
+      <ApartmentEditor key={built.row.updated_at} apartment={built.row} amenities={d.amenities} selectedAmenities={d.selected} excludedAmenities={d.excluded} media={d.media}
         hasUnpublishedChanges={unpublished} defaultMinNights={d.defaultMinNights} />
     </>
   );
