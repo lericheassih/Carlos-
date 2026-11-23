@@ -29,7 +29,7 @@ await box("acc_decouvrir", "text=Découvrir les appartements");
 await p.goto(B + "/appartements"); await p.waitForTimeout(1200);
 await p.fill('input[name="arrivee"]', day(12)); await p.fill('input[name="depart"]', day(15)); await p.fill('input[name="voyageurs"]', "2");
 await p.selectOption('select[name="quartier"]', "Agoè 2 Lions");
-await p.evaluate(() => scrollTo(0, 60)); await shot("s-filtres");
+await p.evaluate(() => scrollTo(0, 150)); await shot("s-filtres"); // compteur de logements hors champ
 await box("f_dates", 'input[name="arrivee"]'); await box("f_quartier", 'select[name="quartier"]'); await box("f_btn", "form button.btn-brand");
 await p.click("form button.btn-brand"); await p.waitForLoadState("networkidle"); await p.waitForTimeout(800);
 await p.evaluate(() => scrollTo(0, 330)); await shot("s-resultats");

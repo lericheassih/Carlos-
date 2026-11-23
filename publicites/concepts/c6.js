@@ -2,7 +2,7 @@
 (() => {
   const { E, p, el, split, reveal, scene, clamp } = R;
   R.dur = 45.4;
-  const T = TUTO(), { nine, Y } = T;
+  const T = TUTO(), { nine, Y } = T, POS = window.TUTO_POS;
   const css = document.createElement("style");
   css.textContent = `
     .h6k { position:absolute; left:50%; transform:translateX(-50%); background:#FF385C; color:#fff; border-radius:999px; padding:${nine ? "16px 30px" : "13px 24px"};
@@ -49,8 +49,8 @@
     ],
     marks: [
       { k: "acc_decouvrir", a: 4.6, b: 7.3, label: "Découvrir les appartements" },
-      { k: { x: 0.0846, y: 0.263, w: 0.8308, h: 0.144 }, a: 8.2, b: 9.3, label: "Dates" },
-      { k: { x: 0.0846, y: 0.45, w: 0.8308, h: 0.052 }, a: 9.3, b: 10.1, label: "Voyageurs" },
+      { k: { ...POS.f_dates, h: POS.f_dates.h + 0.094 }, a: 8.2, b: 9.3, label: "Dates" },
+      { k: { ...POS.f_quartier, y: POS.f_quartier.y - 0.097 }, a: 9.3, b: 10.1, label: "Voyageurs" },
       { k: "f_quartier", a: 10.1, b: 11.1, label: "Quartier" },
       { k: "f_btn", a: 11.1, b: 12.6, label: "Rechercher" },
       { k: "r_carte", a: 13.4, b: 15.2, label: "Photos, prix, équipements" },

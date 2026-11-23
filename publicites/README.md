@@ -63,7 +63,7 @@ H.264 High, 30 i/s, AAC 192 kb/s 48 kHz, `faststart` : prêts pour Meta Ads (Ree
 - **Scénario**
   - 0–4,6 s, accroche : logo, « Ce que LUMO vous propose. », pastilles 01 à 05.
   - 01 (4,6–10,7 s) : logements meublés et équipés ; liste réelle des équipements ; pastilles Wi-Fi, climatisation, cuisine équipée.
-  - 02 (10,7–17,1 s) : 3 quartiers avec photo et prix réels (Agoè 2 Lions 50 000 F, Hedzranawoé dès 40 000 F, Totsi 75 000 F) ; filtre par quartier encadré.
+  - 02 (10,7–17,1 s) : plusieurs quartiers (aucun nombre de logements ni de quartiers n'est annoncé, le catalogue grandit) ; exemples avec photo et prix réels (Agoè 2 Lions 50 000 F, Hedzranawoé dès 40 000 F, Totsi 75 000 F) ; filtre par quartier encadré.
   - 03 (17,1–23,3 s) : de 2 nuits à plusieurs mois ; vrais tarifs de Totsi encadrés ; bulle « 1 mois · 800 000 F, soit 26 667 F / nuit ».
   - 04 (23,3–29,5 s) : vraies photos pièce par pièce ; visite photo puis zoom.
   - 05 (29,5–35,8 s) : réservation simple ; prix total puis bouton WhatsApp encadrés.

@@ -46,7 +46,7 @@
     ],
     taps: [{ at: 8.3, k: "eq_btn" }, { at: 26.8, x: 0.5, y: 0.5 }, { at: 34.4, k: "t_wa" }],
     marks: [
-      { k: "f_quartier", a: 14.6, b: 16.8, label: "3 quartiers" },
+      { k: "f_quartier", a: 14.6, b: 16.8, label: "Filtrez par quartier" },
       { k: { x: 0.04, y: 0.135, w: 0.92, h: 0.41 }, a: 19.9, b: 22.8, label: "Plus vous restez, moins vous payez" },
       { k: "t_total", a: 32.0, b: 33.5, label: "Prix total" },
       { k: "t_wa", a: 33.5, b: 35.2, label: "Réserver sur WhatsApp" },
@@ -60,7 +60,7 @@
   T.steps([
     { a: 4.6, b: 10.7, kick: K, n: "01", lab: "Des logements meublés et équipés", sub: "Prêts à vivre dès votre arrivée.",
       extras: [{ html: "Wi-Fi", at: 3.0, dy: 0 }, { html: "Climatisation", at: 3.5, dy: cs }, { html: "Cuisine équipée", at: 4.0, dy: cs * 2 }] },
-    { a: 10.7, b: 17.1, kick: K, n: "02", lab: "Trois quartiers de Lomé", sub: "Choisissez celui qui vous convient.", extraTop: nine ? 620 : 450,
+    { a: 10.7, b: 17.1, kick: K, n: "02", lab: "Plusieurs quartiers de Lomé", sub: "Et de nouveaux logements régulièrement.", extraTop: nine ? 620 : 450,
       extras: [
         { cls: "pcard", html: card("a-salon-baie.jpg", "Agoè 2 Lions", "<b>50 000 F</b> / nuit"), at: 1.0, dy: 0, pop: true },
         { cls: "pcard", html: card("b-salon1.jpg", "Hedzranawoé", "dès <b>40 000 F</b> / nuit"), at: 1.4, dy: pc, pop: true, hot: [3.7, 6.0] },
@@ -79,7 +79,7 @@
 
   // ---------- Appel à l'action ----------
   T.cta(35.7, R.dur, {
-    recap: ["Meublé et équipé", "3 quartiers", "Nuit · semaine · mois", "Photos réelles", "WhatsApp"],
+    recap: ["Meublé et équipé", "Plusieurs quartiers", "Nuit · semaine · mois", "Photos réelles", "WhatsApp"],
     title: "Votre appartement meublé à Lomé.",
     sub: "Découvrez nos logements et réservez en quelques clics.",
     btn: "DÉCOUVRIR LES APPARTEMENTS",
