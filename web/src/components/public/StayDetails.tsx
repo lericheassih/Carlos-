@@ -134,7 +134,7 @@ export function PhotoGallery({ images, name, aptId }: { images: PublicMedia[]; n
               </section>
             ))}
           </div>
-          <a href="#reserver" onClick={() => setTour(false)} className="fixed bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--site-primary)] px-8 py-4 text-base font-semibold text-white shadow-xl">
+          <a href="#reserver" onClick={() => setTour(false)} className="fixed bottom-6 left-1/2 -translate-x-1/2 btn-brand whitespace-nowrap rounded-full px-8 py-4 text-base font-semibold text-white shadow-xl">
             Vérifier les disponibilités
           </a>
         </div>

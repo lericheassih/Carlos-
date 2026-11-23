@@ -68,7 +68,7 @@ export function MobileBookBar({ aptId, nightPrice, minNights }: { aptId: string;
       <div className="flex shrink-0 flex-col items-center">
         <a id="mb-btn" href={ready && q.waLink ? q.waLink : "#reserver"} target={ready ? "_blank" : undefined} rel="noopener noreferrer"
           onClick={() => { if (ready) track("whatsapp_click", { apartment_id: aptId, metadata: { placement: "mobile_bar", nights: q.nights } }); }}
-          className="rounded-full bg-[var(--site-primary)] px-10 py-3.5 text-base font-semibold text-white shadow-sm active:scale-[0.98]">
+          className="btn-brand rounded-full px-10 py-3.5 text-base font-semibold text-white shadow-sm active:scale-[0.98]">
           {ready ? "Réserver" : "Choisir les dates"}
         </a>
         <span className="mt-1.5 text-[11px] text-slate-500">Confirmation sur WhatsApp</span>

@@ -5,6 +5,7 @@ import type { PublicApartment } from "@/lib/public-data";
 import { displayNightPrice } from "@/lib/pricing";
 import { fcfa } from "@/lib/format";
 import { todayIso } from "@/lib/dates";
+import { FavHeart } from "./FavHeart";
 
 const TYPE: Record<string, string> = { villa: "Villa", studio: "Studio", maison: "Maison", chambre: "Chambre", duplex: "Duplex", penthouse: "Penthouse" };
 
@@ -18,12 +19,13 @@ export function ApartmentCard({ a, priority, query = "" }: { a: PublicApartment;
           <Image src={a.cover_url} alt={a.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" priority={priority}
             className="object-cover transition duration-300 group-hover:scale-[1.03]" />
         ) : <div className="grid size-full place-items-center text-slate-300"><Home className="size-10" /></div>}
+        <FavHeart aptId={a.id} />
         {(a.featured || price.original) && (
           <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[13px] font-semibold shadow-sm">{price.original ? a.pricing.promo_label || "Promotion" : "Coup de cœur voyageurs"}</span>
         )}
       </div>
       <div className="mt-3 flex items-start justify-between gap-2">
-        <h3 className="text-[15px] font-semibold">{TYPE[a.property_type] ?? "Appartement"} · {a.neighborhood || a.city}</h3>
+        <h3 className="text-[15px] font-medium">{TYPE[a.property_type] ?? "Appartement"} · {a.neighborhood || a.city}</h3>
         <span className="flex shrink-0 items-center gap-1 text-[15px]"><Star className="size-3.5 fill-slate-900" />{a.review_count && a.avg_rating ? String(a.avg_rating).replace(".", ",") : "Nouveau"}</span>
       </div>
       <p className="text-[15px] text-slate-500">{a.name}</p>

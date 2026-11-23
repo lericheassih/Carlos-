@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Mail, MapPin, Phone, Sparkles, Star } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, MapPin, Phone, Search, Sparkles, Star } from "lucide-react";
 import type { SiteSettings } from "@/lib/site-settings";
 import type { PublicApartment, PublicReview } from "@/lib/public-data";
 import { ApartmentCard } from "./ApartmentCard";
@@ -32,14 +32,14 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
             </WhatsAppLink>
           </div>
           {/* Recherche rapide */}
-          <form action="/appartements" className="mt-10 grid max-w-3xl gap-2 rounded-2xl bg-white/95 p-2 shadow-2xl backdrop-blur sm:grid-cols-[1fr_1fr_120px_auto]">
+          <form action="/appartements" className="mt-10 grid max-w-3xl gap-1 rounded-[28px] bg-white p-2 shadow-2xl sm:grid-cols-[1fr_1fr_120px_auto] sm:rounded-full">
             <label className="rounded-xl px-3 py-2 hover:bg-slate-50"><span className="block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Arrivée</span>
               <input type="date" name="arrivee" min={today} className="block min-h-6 w-full appearance-none bg-transparent text-sm outline-none [&::-webkit-date-and-time-value]:text-left" /></label>
             <label className="rounded-xl px-3 py-2 hover:bg-slate-50"><span className="block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Départ</span>
               <input type="date" name="depart" min={today} className="block min-h-6 w-full appearance-none bg-transparent text-sm outline-none [&::-webkit-date-and-time-value]:text-left" /></label>
             <label className="rounded-xl px-3 py-2 hover:bg-slate-50"><span className="block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Personnes</span>
               <input type="number" name="voyageurs" min={1} max={30} placeholder="2" className="block min-h-6 w-full appearance-none bg-transparent text-sm outline-none [&::-webkit-date-and-time-value]:text-left" /></label>
-            <button className="rounded-xl bg-[var(--site-primary)] px-6 py-3 text-sm font-semibold text-white">Rechercher</button>
+            <button className="btn-brand flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold"><Search className="size-4" strokeWidth={3} /> Rechercher</button>
           </form>
         </div>
       </section>
@@ -48,8 +48,8 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--site-primary)]">Notre sélection</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">Nos appartements</h2>
+            <h2 className="text-[22px] font-semibold sm:text-[26px]">Logements populaires à Lomé</h2>
+            <p className="mt-1 text-slate-500">Choisis par nos voyageurs</p>
           </div>
           {apartments.length > 0 && <Link href="/appartements" className="inline-flex items-center gap-1 font-semibold text-[var(--site-primary)] hover:underline">Voir tous les logements <ArrowRight className="size-4" /></Link>}
         </div>
@@ -109,18 +109,18 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
 
       {/* Contact */}
       <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:px-6 sm:py-20">
-        <div className="grid gap-8 overflow-hidden rounded-3xl bg-[var(--site-primary)] p-8 text-white sm:p-12 md:grid-cols-2">
+        <div className="grid gap-8 overflow-hidden rounded-2xl bg-slate-100 p-8 sm:p-12 md:grid-cols-2">
           <div>
             <h2 className="font-display text-3xl font-semibold sm:text-4xl">Contactez-nous</h2>
-            {s.contact_text && <p className="mt-3 text-white/85">{s.contact_text}</p>}
+            {s.contact_text && <p className="mt-3 text-slate-600">{s.contact_text}</p>}
             <WhatsAppLink number={s.whatsapp} message={`Bonjour ${s.company_name} !`} placement="contact"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 font-semibold text-slate-900 hover:bg-slate-100">
-              <WhatsAppIcon className="size-5 text-[#25D366]" /> Écrire sur WhatsApp
+              className="btn-brand mt-6 inline-flex items-center gap-2 rounded-lg px-6 py-3.5 font-semibold">
+              <WhatsAppIcon className="size-5" /> Écrire sur WhatsApp
             </WhatsAppLink>
           </div>
-          <ul className="space-y-4 self-center text-white/90">
-            {s.phone && <li><PhoneLink phone={s.phone} placement="contact" className="flex items-center gap-3 hover:text-white"><Phone className="size-5" /> {s.phone}</PhoneLink></li>}
-            {s.email && <li><a href={`mailto:${s.email}`} className="flex items-center gap-3 hover:text-white"><Mail className="size-5" /> {s.email}</a></li>}
+          <ul className="space-y-4 self-center text-slate-900">
+            {s.phone && <li><PhoneLink phone={s.phone} placement="contact" className="flex items-center gap-3 hover:underline"><Phone className="size-5" /> {s.phone}</PhoneLink></li>}
+            {s.email && <li><a href={`mailto:${s.email}`} className="flex items-center gap-3 hover:underline"><Mail className="size-5" /> {s.email}</a></li>}
             {s.address && <li className="flex items-center gap-3"><MapPin className="size-5" /> {s.address}</li>}
           </ul>
         </div>

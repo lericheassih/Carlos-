@@ -61,7 +61,7 @@ export function Tracker({ consentMode }: { consentMode: "notice" | "opt_in" }) {
           </p>
           <div className="mt-3 flex justify-end gap-2">
             <button onClick={() => setConsent("denied")} className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-slate-100">Refuser</button>
-            <button onClick={() => setConsent("granted")} className="rounded-lg bg-[var(--site-primary)] px-4 py-2 font-medium text-white">Accepter</button>
+            <button onClick={() => setConsent("granted")} className="rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white">Accepter</button>
           </div>
         </div>
       )}

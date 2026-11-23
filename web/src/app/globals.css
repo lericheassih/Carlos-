@@ -67,3 +67,20 @@ body { font-family: var(--font-sans); color: var(--color-ink); }
   .site:has(.apt-page) > header { display: none; }
   .site:has(.apt-page) #wa-fab { display: none; }
 }
+
+/* ===== Langage visuel inspiré d'Airbnb (site public) =====
+   Rose de marque #FF385C · bouton dégradé #E61E4D → #E31C5F → #D70466
+   Texte #222222 · secondaire #6A6A6A · bordures #DDDDDD / #EBEBEB · fond clair #F7F7F7
+   Rayons : boutons 8px, cartes/photos 12px, recherche en pilule · Ombre panneau : 0 6px 16px rgba(0,0,0,.12) */
+.btn-brand {
+  color: #fff;
+  background-image: linear-gradient(to right,
+    color-mix(in srgb, var(--site-primary) 82%, #c4002f) 0%,
+    color-mix(in srgb, var(--site-primary) 80%, #c8005a) 50%,
+    color-mix(in srgb, var(--site-primary) 72%, #b0006a) 100%);
+  transition: filter .2s, transform .1s;
+}
+.btn-brand:hover { filter: brightness(.95); }
+.btn-brand:active { transform: scale(.98); }
+.site .shadow-search { box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.05); }
+.site .shadow-search:hover { box-shadow: 0 2px 4px rgba(0,0,0,.18); }

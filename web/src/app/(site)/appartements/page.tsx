@@ -61,7 +61,7 @@ export default async function Catalog({ searchParams }: { searchParams: Promise<
               {neighborhoods.map((n) => <option key={n} value={n}>{n}</option>)}
             </select></label>
           <div className="flex items-end gap-2">
-            <button className="h-11 flex-1 rounded-xl bg-[var(--site-primary)] px-4 text-sm font-semibold text-white">Rechercher</button>
+            <button className="btn-brand h-11 flex-1 rounded-lg px-4 text-sm font-semibold">Rechercher</button>
           </div>
         </div>
         <details className="mt-3 group" open={Boolean(min || max || rooms || eq.length)}>

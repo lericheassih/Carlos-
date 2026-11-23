@@ -151,7 +151,7 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
             return (
               <button key={d} type="button" disabled={disabled || ranges === null} onClick={() => pick(d)}
                 className={`mx-auto grid size-10 place-items-center rounded-full text-sm tabular-nums transition
-                  ${sel ? "bg-[var(--site-primary)] font-semibold text-white" : inRange ? "rounded-none bg-[color-mix(in_srgb,var(--site-primary)_12%,white)]" : "hover:bg-slate-100"}
+                  ${sel ? "bg-slate-900 font-semibold text-white" : inRange ? "rounded-none bg-slate-100" : "hover:ring-1 hover:ring-slate-900"}
                   ${disabled ? "cursor-not-allowed text-slate-300 line-through hover:bg-transparent" : ""}`}
                 aria-label={`${dateFr(d)}${taken ? " (indisponible)" : ""}`} aria-pressed={sel}>
                 {i + 1}
@@ -160,18 +160,18 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
           })}
         </div>
         <div className="mt-2 flex items-center gap-4 text-[11px] text-slate-500">
-          <span className="flex items-center gap-1"><span className="size-2.5 rounded-full bg-[var(--site-primary)]" /> Sélection</span>
+          <span className="flex items-center gap-1"><span className="size-2.5 rounded-full bg-slate-900" /> Sélection</span>
           <span className="flex items-center gap-1"><span className="text-slate-300 line-through">12</span> Indisponible</span>
           {ranges === null && <span className="flex items-center gap-1"><Loader2 className="size-3 animate-spin" /> Vérification…</span>}
         </div>
         {loadError && <p className="mt-2 text-xs text-amber-700">Disponibilités momentanément indisponibles : nous confirmerons sur WhatsApp.</p>}
       </div>
 
-      <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-slate-200 text-sm">
-        <div className="border-r border-slate-200 p-3"><div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Arrivée</div><div className="mt-0.5 font-medium">{start ? dateFr(start) : "—"}</div></div>
-        <div className="p-3"><div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Départ</div><div className="mt-0.5 font-medium">{end ? dateFr(end) : "—"}</div></div>
+      <div className="grid grid-cols-2 overflow-hidden rounded-lg border border-slate-400 text-sm">
+        <div className="border-r border-slate-200 p-3"><div className="text-[10px] font-extrabold uppercase tracking-wide text-slate-900">Arrivée</div><div className="mt-0.5 font-medium">{start ? dateFr(start) : "—"}</div></div>
+        <div className="p-3"><div className="text-[10px] font-extrabold uppercase tracking-wide text-slate-900">Départ</div><div className="mt-0.5 font-medium">{end ? dateFr(end) : "—"}</div></div>
         <div className="col-span-2 flex items-center justify-between border-t border-slate-200 p-3">
-          <div><div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Personnes</div><div className="text-xs text-slate-500">max. {apartment.max_guests}</div></div>
+          <div><div className="text-[10px] font-extrabold uppercase tracking-wide text-slate-900">Personnes</div><div className="text-xs text-slate-500">max. {apartment.max_guests}</div></div>
           <div className="flex items-center gap-3">
             <button type="button" onClick={() => setGuests((g) => Math.max(1, g - 1))} className="grid size-8 place-items-center rounded-full border border-slate-300 disabled:opacity-30" disabled={guests <= 1} aria-label="Moins"><Minus className="size-4" /></button>
             <span className="w-5 text-center font-semibold tabular-nums">{guests}</span>
@@ -197,13 +197,13 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
       {whatsapp && (
         <a href={valid ? waLink(whatsapp, waMsg) : undefined} target="_blank" rel="noopener noreferrer" aria-disabled={!valid}
           onClick={(e) => { if (!valid) { e.preventDefault(); setErr(start && end ? null : "Sélectionnez vos dates d'arrivée et de départ."); return; } if (!preview) track("whatsapp_click", { apartment_id: apartment.id, metadata: { placement: "booking", nights } }); }}
-          className={`flex h-12 items-center justify-center gap-2 rounded-xl text-[15px] font-bold uppercase tracking-wide text-white transition ${valid ? "bg-[#25D366] hover:brightness-95" : "cursor-not-allowed bg-slate-300"}`}>
-          <WhatsAppIcon /> Réserver sur WhatsApp
+          className={`flex h-12 items-center justify-center gap-2 rounded-lg text-base font-semibold text-white transition ${valid ? "btn-brand" : "cursor-not-allowed bg-slate-300"}`}>
+          <WhatsAppIcon /> Réserver
         </a>
       )}
 
       {!form ? (
-        <button type="button" disabled={!valid} onClick={() => setForm(true)} className="w-full rounded-xl border border-slate-300 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50 disabled:opacity-40">
+        <button type="button" disabled={!valid} onClick={() => setForm(true)} className="w-full rounded-lg border border-slate-900 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 disabled:opacity-40">
           Envoyer une demande de réservation
         </button>
       ) : (
@@ -217,13 +217,13 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
             <input type="email" autoComplete="email" value={c.email} onChange={(e) => setC({ ...c, email: e.target.value })} className="h-11 w-full rounded-lg border border-slate-300 px-3" /></label>
           <label className="block text-sm"><span className="mb-1 block font-medium">Message</span>
             <textarea rows={2} value={c.message} onChange={(e) => setC({ ...c, message: e.target.value })} className="w-full rounded-lg border border-slate-300 px-3 py-2" /></label>
-          <button disabled={sending || !valid} className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--site-primary)] font-semibold text-white disabled:opacity-50">
+          <button disabled={sending || !valid} className="flex h-11 w-full items-center justify-center gap-2 rounded-lg btn-brand font-semibold disabled:opacity-50">
             {sending && <Loader2 className="size-4 animate-spin" />} Envoyer ma demande
           </button>
           <p className="text-[11px] text-slate-500">Vos coordonnées servent uniquement à traiter votre réservation.</p>
         </form>
       )}
-      <p className="text-center text-xs text-slate-500">Aucun paiement en ligne : nous confirmons votre séjour par message.</p>
+      <p className="text-center text-sm text-slate-500">Confirmation sur WhatsApp · aucun montant débité pour le moment</p>
     </div>
   );
 }

@@ -121,7 +121,7 @@ await monthNav(co);
 await pub.click(`aside button[aria-label^="${fmt(co)}"]`);
 const total = await pub.locator("aside", { hasText: "Total estimé" }).textContent();
 ok("Récapitulatif du prix (3 nuits × 75 000 = 225 000 FCFA)", total.includes("225 000 FCFA"));
-const wa = pub.locator("aside a", { hasText: /Réserver sur WhatsApp/i });
+const wa = pub.locator("aside a[href*='wa.me']", { hasText: /^\s*Réserver\s*$/ });
 const href = await wa.getAttribute("href");
 const msg = decodeURIComponent(href.split("text=")[1] ?? "");
 ok("Message WhatsApp prérempli (nom, dates, nuits, personnes, prix)", msg.includes(name) && msg.includes("3 nuits") && msg.includes("2 personnes") && msg.includes("225 000 FCFA"), href.slice(0, 40) + "…");
