@@ -29,6 +29,6 @@
 <body>
 <div id="stage"></div>
 <script src="moteur.js"></script>
-<script>document.write('<script src="concepts/' + new URLSearchParams(location.search).get("c") + '.js"><\/script>')</script>
+<script>(() => { const c = new URLSearchParams(location.search).get("c"); if (/^c[56]$/.test(c)) document.write('<script src="ui/positions.js"><\/script><script src="concepts/tuto.js"><\/script>'); document.write('<script src="concepts/' + c + '.js"><\/script>'); })()</script>
 </body>
 </html>

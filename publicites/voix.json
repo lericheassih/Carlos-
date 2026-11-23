@@ -1,46 +1,362 @@
 {
-  "c1": { "speed": 0.92, "lines": [
-    [0.35, "Et si votre prochain séjour commençait ici ?", "Et si votre prochain séjour commençait ici ?"],
-    [3.6, "Un salon baigné de lumière.", "Un salon baigné de lumière."],
-    [6.3, "Une chambre où l'on dort vraiment.", "Une chambre où l'on dort vraiment."],
-    [9.2, "Une cuisine prête à l'emploi.", "Une cuisine prête à l'emploi."],
-    [12.6, "Tout est déjà là : climatisation, wifi, cuisine équipée.", "Tout est déjà là : climatisation, wifi, cuisine équipée."],
-    [17.8, "Pour une nuit, une semaine ou un mois.", "Pour une nuit, une semaine ou un mois."],
-    [26.0, "Posez vos valises. Respirez.", "Posez vos valises. Respirez."],
-    [30.2, "Ici, vous êtes chez vous.", "Ici, vous êtes chez vous."],
-    [35.4, "Trouvez votre prochain appartement meublé à Lomé.", "Trouvez votre prochain appartement meublé à Lomé."],
-    [38.8, "Réservez en quelques clics.", "Réservez en quelques clics."]
-  ]},
-  "c2": { "speed": 1.08, "lines": [
-    [1.0, "Un appart meublé à Lomé ?", "Un appart meublé à Lomé ?"],
-    [3.4, "4 logements. 3 quartiers.", "Quatre logements. Trois quartiers."],
-    [6.4, "À partir de 40 000 FCFA la nuit.", "À partir de quarante mille francs CFA la nuit."],
-    [12.4, "Wifi. Clim. Cuisine équipée.", "Wifi. Clim. Cuisine équipée."],
-    [16.6, "À la nuit, à la semaine ou au mois.", "À la nuit, à la semaine ou au mois."],
-    [25.2, "Vous arrivez, vous posez vos valises. C'est tout.", "Vous arrivez, vous posez vos valises. C'est tout."],
-    [31.0, "Trouvez le vôtre maintenant.", "Trouvez le vôtre maintenant."],
-    [33.4, "Réservez en quelques clics.", "Réservez en quelques clics."]
-  ]},
-  "c3": { "speed": 0.95, "lines": [
-    [0.5, "Lomé, 8 h 47. Votre réunion est à 9 h 30.", "Lomé, huit heures quarante-sept. Votre réunion est à neuf heures trente."],
-    [4.4, "Ici, vous travaillez au calme.", "Ici, vous travaillez au calme."],
-    [7.6, "Une connexion wifi, une vraie table de travail.", "Une connexion wifi, une vraie table de travail."],
-    [12.8, "Climatisation. Arrivée autonome selon le logement.", "Climatisation. Arrivée autonome, selon le logement."],
-    [18.2, "Des séjours d'une nuit à plusieurs mois.", "Des séjours d'une nuit à plusieurs mois."],
-    [25.6, "Et le soir, un vrai chez-vous pour récupérer.", "Et le soir, un vrai chez-vous pour récupérer."],
-    [35.2, "Réservez votre prochain séjour d'affaires à Lomé.", "Réservez votre prochain séjour d'affaires à Lomé."],
-    [38.6, "Découvrez nos appartements.", "Découvrez nos appartements."]
-  ]},
-  "c4": { "speed": 1.0, "lines": [
-    [0.4, "Réserver un appartement meublé à Lomé ?", "Réserver un appartement meublé à Lomé ?"],
-    [2.6, "Trois étapes. C'est tout.", "Trois étapes. C'est tout."],
-    [4.6, "Un : choisissez votre logement.", "Un : choisissez votre logement."],
-    [7.6, "Photos, équipements, prix : tout est affiché.", "Photos, équipements, prix : tout est affiché."],
-    [13.0, "Deux : sélectionnez vos dates.", "Deux : sélectionnez vos dates."],
-    [16.0, "Le prix total s'affiche tout de suite.", "Le prix total s'affiche tout de suite."],
-    [22.4, "Trois : envoyez votre demande sur WhatsApp.", "Trois : envoyez votre demande sur WhatsApp."],
-    [26.6, "On vous répond rapidement.", "On vous répond rapidement."],
-    [31.4, "Trouvez votre prochain appartement meublé.", "Trouvez votre prochain appartement meublé."],
-    [34.6, "Réservez en quelques clics.", "Réservez en quelques clics."]
-  ]}
+ "c1": {
+  "speed": 0.92,
+  "lines": [
+   [
+    0.35,
+    "Et si votre prochain séjour commençait ici ?",
+    "Et si votre prochain séjour commençait ici ?"
+   ],
+   [
+    3.6,
+    "Un salon baigné de lumière.",
+    "Un salon baigné de lumière."
+   ],
+   [
+    6.3,
+    "Une chambre où l'on dort vraiment.",
+    "Une chambre où l'on dort vraiment."
+   ],
+   [
+    9.2,
+    "Une cuisine prête à l'emploi.",
+    "Une cuisine prête à l'emploi."
+   ],
+   [
+    12.6,
+    "Tout est déjà là : climatisation, wifi, cuisine équipée.",
+    "Tout est déjà là : climatisation, wifi, cuisine équipée."
+   ],
+   [
+    17.8,
+    "Pour une nuit, une semaine ou un mois.",
+    "Pour une nuit, une semaine ou un mois."
+   ],
+   [
+    26.0,
+    "Posez vos valises. Respirez.",
+    "Posez vos valises. Respirez."
+   ],
+   [
+    30.2,
+    "Ici, vous êtes chez vous.",
+    "Ici, vous êtes chez vous."
+   ],
+   [
+    35.4,
+    "Trouvez votre prochain appartement meublé à Lomé.",
+    "Trouvez votre prochain appartement meublé à Lomé."
+   ],
+   [
+    38.8,
+    "Réservez en quelques clics.",
+    "Réservez en quelques clics."
+   ]
+  ]
+ },
+ "c2": {
+  "speed": 1.08,
+  "lines": [
+   [
+    1.0,
+    "Un appart meublé à Lomé ?",
+    "Un appart meublé à Lomé ?"
+   ],
+   [
+    3.4,
+    "4 logements. 3 quartiers.",
+    "Quatre logements. Trois quartiers."
+   ],
+   [
+    6.4,
+    "À partir de 40 000 FCFA la nuit.",
+    "À partir de quarante mille francs CFA la nuit."
+   ],
+   [
+    12.4,
+    "Wifi. Clim. Cuisine équipée.",
+    "Wifi. Clim. Cuisine équipée."
+   ],
+   [
+    16.6,
+    "À la nuit, à la semaine ou au mois.",
+    "À la nuit, à la semaine ou au mois."
+   ],
+   [
+    25.2,
+    "Vous arrivez, vous posez vos valises. C'est tout.",
+    "Vous arrivez, vous posez vos valises. C'est tout."
+   ],
+   [
+    31.0,
+    "Trouvez le vôtre maintenant.",
+    "Trouvez le vôtre maintenant."
+   ],
+   [
+    33.4,
+    "Réservez en quelques clics.",
+    "Réservez en quelques clics."
+   ]
+  ]
+ },
+ "c3": {
+  "speed": 0.95,
+  "lines": [
+   [
+    0.5,
+    "Lomé, 8 h 47. Votre réunion est à 9 h 30.",
+    "Lomé, huit heures quarante-sept. Votre réunion est à neuf heures trente."
+   ],
+   [
+    4.4,
+    "Ici, vous travaillez au calme.",
+    "Ici, vous travaillez au calme."
+   ],
+   [
+    7.6,
+    "Une connexion wifi, une vraie table de travail.",
+    "Une connexion wifi, une vraie table de travail."
+   ],
+   [
+    12.8,
+    "Climatisation. Arrivée autonome selon le logement.",
+    "Climatisation. Arrivée autonome, selon le logement."
+   ],
+   [
+    18.2,
+    "Des séjours d'une nuit à plusieurs mois.",
+    "Des séjours d'une nuit à plusieurs mois."
+   ],
+   [
+    25.6,
+    "Et le soir, un vrai chez-vous pour récupérer.",
+    "Et le soir, un vrai chez-vous pour récupérer."
+   ],
+   [
+    35.2,
+    "Réservez votre prochain séjour d'affaires à Lomé.",
+    "Réservez votre prochain séjour d'affaires à Lomé."
+   ],
+   [
+    38.6,
+    "Découvrez nos appartements.",
+    "Découvrez nos appartements."
+   ]
+  ]
+ },
+ "c4": {
+  "speed": 1.0,
+  "lines": [
+   [
+    0.4,
+    "Réserver un appartement meublé à Lomé ?",
+    "Réserver un appartement meublé à Lomé ?"
+   ],
+   [
+    2.6,
+    "Trois étapes. C'est tout.",
+    "Trois étapes. C'est tout."
+   ],
+   [
+    4.6,
+    "Un : choisissez votre logement.",
+    "Un : choisissez votre logement."
+   ],
+   [
+    7.6,
+    "Photos, équipements, prix : tout est affiché.",
+    "Photos, équipements, prix : tout est affiché."
+   ],
+   [
+    13.0,
+    "Deux : sélectionnez vos dates.",
+    "Deux : sélectionnez vos dates."
+   ],
+   [
+    16.0,
+    "Le prix total s'affiche tout de suite.",
+    "Le prix total s'affiche tout de suite."
+   ],
+   [
+    22.4,
+    "Trois : envoyez votre demande sur WhatsApp.",
+    "Trois : envoyez votre demande sur WhatsApp."
+   ],
+   [
+    26.6,
+    "On vous répond rapidement.",
+    "On vous répond rapidement."
+   ],
+   [
+    31.4,
+    "Trouvez votre prochain appartement meublé.",
+    "Trouvez votre prochain appartement meublé."
+   ],
+   [
+    34.6,
+    "Réservez en quelques clics.",
+    "Réservez en quelques clics."
+   ]
+  ]
+ },
+ "c5": {
+  "speed": 1.0,
+  "lines": [
+   [
+    0.4,
+    "Vous cherchez un appartement meublé à Lomé ?",
+    "Vous cherchez un appartement meublé à Lomé ?"
+   ],
+   [
+    2.7,
+    "Voici ce que LUMO vous propose.",
+    "Voici ce que Lumo vous propose."
+   ],
+   [
+    4.8,
+    "Un : des logements meublés et équipés.",
+    "Un : des logements meublés et équipés."
+   ],
+   [
+    7.6,
+    "Wi-Fi, climatisation, cuisine équipée.",
+    "Wi-Fi, climatisation, cuisine équipée."
+   ],
+   [
+    10.8,
+    "Deux : trois quartiers, Agoè, Hedzranawoé et Totsi.",
+    "Deux : trois quartiers, Agoé, Hédzranawoé et Totsi."
+   ],
+   [
+    14.4,
+    "À partir de 40 000 FCFA la nuit.",
+    "À partir de quarante mille francs CFA la nuit."
+   ],
+   [
+    17.2,
+    "Trois : de deux nuits à plusieurs mois.",
+    "Trois : de deux nuits à plusieurs mois."
+   ],
+   [
+    20.0,
+    "Plus vous restez, moins la nuit coûte.",
+    "Plus vous restez, moins la nuit coûte."
+   ],
+   [
+    23.4,
+    "Quatre : de vraies photos, pièce par pièce.",
+    "Quatre : de vraies photos, pièce par pièce."
+   ],
+   [
+    26.4,
+    "Visitez et zoomez avant de choisir.",
+    "Visitez et zoomez avant de choisir."
+   ],
+   [
+    29.6,
+    "Cinq : une réservation simple.",
+    "Cinq : une réservation simple."
+   ],
+   [
+    32.0,
+    "Le prix total s'affiche, vous réservez sur WhatsApp.",
+    "Le prix total s'affiche, et vous réservez sur WhatsApp."
+   ],
+   [
+    36.0,
+    "Découvrez nos appartements meublés.",
+    "Découvrez nos appartements meublés."
+   ],
+   [
+    38.8,
+    "Réservez en quelques clics.",
+    "Réservez en quelques clics."
+   ]
+  ]
+ },
+ "c6": {
+  "speed": 1.0,
+  "lines": [
+   [
+    0.3,
+    "Comment réserver sur le site LUMO ?",
+    "Comment réserver sur le site Lumo ?"
+   ],
+   [
+    2.2,
+    "Suivez le guide.",
+    "Suivez le guide."
+   ],
+   [
+    3.8,
+    "Un : ouvrez le site, touchez « Découvrir les appartements ».",
+    "Un : ouvrez le site, et touchez Découvrir les appartements."
+   ],
+   [
+    7.8,
+    "Deux : choisissez vos dates, les voyageurs et le quartier.",
+    "Deux : choisissez vos dates, les voyageurs, et le quartier."
+   ],
+   [
+    11.3,
+    "Puis touchez « Rechercher ».",
+    "Puis touchez Rechercher."
+   ],
+   [
+    13.2,
+    "Trois : comparez les logements.",
+    "Trois : comparez les logements."
+   ],
+   [
+    15.4,
+    "Le cœur garde vos favoris.",
+    "Le cœur garde vos favoris."
+   ],
+   [
+    17.8,
+    "Quatre : ouvrez la fiche et faites la visite photo.",
+    "Quatre : ouvrez la fiche, et faites la visite photo."
+   ],
+   [
+    20.9,
+    "Touchez une photo pour zoomer.",
+    "Touchez une photo pour zoomer."
+   ],
+   [
+    23.6,
+    "Cinq : lisez les équipements et la section « À savoir ».",
+    "Cinq : lisez les équipements, et la section À savoir."
+   ],
+   [
+    28.0,
+    "Six : sélectionnez vos dates.",
+    "Six : sélectionnez vos dates."
+   ],
+   [
+    30.0,
+    "Le prix total s'affiche aussitôt.",
+    "Le prix total s'affiche aussitôt."
+   ],
+   [
+    32.8,
+    "Sept : réservez sur WhatsApp, ou envoyez une demande.",
+    "Sept : réservez sur WhatsApp, ou envoyez une demande."
+   ],
+   [
+    36.5,
+    "Demande envoyée : on vous recontacte très vite.",
+    "Demande envoyée : on vous recontacte très vite."
+   ],
+   [
+    39.6,
+    "Votre appartement meublé à Lomé vous attend.",
+    "Votre appartement meublé à Lomé vous attend."
+   ],
+   [
+    42.4,
+    "Réservez dès maintenant.",
+    "Réservez dès maintenant."
+   ]
+  ]
+ }
 }

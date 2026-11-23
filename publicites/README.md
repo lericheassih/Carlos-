@@ -1,4 +1,4 @@
-# Campagne motion design LUMO Immobilier — 4 concepts, 8 vidéos
+# Campagne motion design LUMO Immobilier — 6 concepts, 12 vidéos
 
 | Fichier | Concept | Durée | Format |
 |---|---|---|---|
@@ -6,6 +6,8 @@
 | `export/c2-9x16.mp4` · `export/c2-4x5.mp4` | 2. « Trouvé. » — recherche rapide, dynamique | 36,6 s | idem |
 | `export/c3-9x16.mp4` · `export/c3-4x5.mp4` | 3. « Votre bureau à Lomé » — séjours professionnels | 41 s | idem |
 | `export/c4-9x16.mp4` · `export/c4-4x5.mp4` | 4. « 3 étapes » — simplicité de réservation | 37,6 s | idem |
+| `export/c5-9x16.mp4` · `export/c5-4x5.mp4` | 5. « Ce que LUMO vous propose » — présentation des services | 41,8 s | idem |
+| `export/c6-9x16.mp4` · `export/c6-4x5.mp4` | 6. « Mode d'emploi » — tutoriel du site pas à pas | 45,4 s | idem |
 
 H.264 High, 30 i/s, AAC 192 kb/s 48 kHz, `faststart` : prêts pour Meta Ads (Reels, Stories, fil d'actualité).
 
@@ -55,6 +57,23 @@ H.264 High, 30 i/s, AAC 192 kb/s 48 kHz, `faststart` : prêts pour Meta Ads (Ree
   - 22,3–31 s, étape 3 « Réservez sur WhatsApp » : le message se tape, s'envoie (✓✓), une réponse arrive.
   - 30,9–37,6 s, appel à l'action : cercle rose qui s'étend depuis le téléphone, récapitulatif « 1 · Choisir 2 · Dates 3 · WhatsApp », bouton blanc qui pulse.
 
+### 5. « Ce que LUMO vous propose » — pédagogique, présentation des services
+- **Cible** : personnes qui découvrent LUMO. **Promesse** : tout ce que nous proposons, en 5 points.
+- **Direction artistique** : celle du concept 4 (fond blanc, rose, Figtree, téléphone avec le vrai site), chapitres numérotés 01 à 05, encadrés roses avec projecteur sur l'écran.
+- **Scénario**
+  - 0–4,6 s, accroche : logo, « Ce que LUMO vous propose. », pastilles 01 à 05.
+  - 01 (4,6–10,7 s) : logements meublés et équipés ; liste réelle des équipements ; pastilles Wi-Fi, climatisation, cuisine équipée.
+  - 02 (10,7–17,1 s) : 3 quartiers avec photo et prix réels (Agoè 2 Lions 50 000 F, Hedzranawoé dès 40 000 F, Totsi 75 000 F) ; filtre par quartier encadré.
+  - 03 (17,1–23,3 s) : de 2 nuits à plusieurs mois ; vrais tarifs de Totsi encadrés ; bulle « 1 mois · 800 000 F, soit 26 667 F / nuit ».
+  - 04 (23,3–29,5 s) : vraies photos pièce par pièce ; visite photo puis zoom.
+  - 05 (29,5–35,8 s) : réservation simple ; prix total puis bouton WhatsApp encadrés.
+  - 35,7–41,8 s, appel à l'action (même mécanique que le concept 4).
+
+### 6. « Mode d'emploi » — tutoriel du site
+- **Cible** : personnes qui hésitent à réserver en ligne. **Promesse** : c'est facile, on vous montre.
+- **Direction artistique** : celle du concept 4 ; chaque bouton réel du site est encadré en rose (le reste de l'écran s'assombrit) avec une étiquette, et un cercle de toucher montre où appuyer. Les positions viennent du site lui-même (`ui/positions.json`).
+- **Scénario** : accroche « Comment réserver sur le site LUMO ? » puis 7 étapes : 1 ouvrir le site · 2 filtrer (dates, voyageurs, quartier, Rechercher) · 3 comparer, cœur favori · 4 fiche, visite photo, zoom · 5 équipements et « À savoir » · 6 dates et prix total · 7 réserver sur WhatsApp ou envoyer une demande, jusqu'à l'écran « Demande envoyée ». Appel à l'action à 39,3 s.
+
 ## Visuels et droits
 - **Toutes les photos sont vos propres photos LUMO** (Agoè 2 Lions, Hedzranawoé, Totsi, villa). **Aucune image de banque en ligne n'est utilisée** : aucune question de droits, et aucun risque de faire passer un autre logement pour le vôtre.
 - Les équipements cités sont ceux de vos fiches : Wi-Fi, climatisation, cuisine équipée, meublé. L'arrivée autonome est marquée « selon le logement ».
@@ -72,11 +91,12 @@ Prérequis : Node + Playwright (Chromium), ffmpeg, Python 3 + numpy, soundfile, 
 
 ```bash
 python3 voix.py <dossier_modele_kokoro> audio voix.json   # voix off + sous-titres horodatés
-python3 audio.py c1 c2 c3 c4                               # musique + sound design + mixage
+python3 audio.py c1 c2 c3 c4 c5 c6                              # musique + sound design + mixage
 ./tout-rendre.sh                                           # 8 vidéos dans export/
 node rendu.mjs c2 1920 --stills 1.5,8,20                   # images-clés d'aperçu dans apercus/
 ```
-- **Textes, durées, photos** : `concepts/c1.js` à `c4.js`. Le moteur `moteur.js` calcule chaque image à partir du temps, puis le rendu la capture à 30 i/s.
+- **Textes, durées, photos** : `concepts/c1.js` à `c6.js` (`concepts/tuto.js` : téléphone, encadrés, étapes et appel à l'action communs à c5 et c6).
+- **Écrans du site** : `node captures-ui.mjs` (site lancé sur localhost:3000, ou `SITE=https://…`) recapture les écrans `ui/s-*.png` et les positions des boutons. À relancer si le site change. Le moteur `moteur.js` calcule chaque image à partir du temps, puis le rendu la capture à 30 i/s.
 - **Adresse du site** : à ajouter dans l'appel à l'action de chaque concept une fois le domaine connu (aujourd'hui : logo + WhatsApp +228 70 39 05 05).
 
 ## Limites honnêtes

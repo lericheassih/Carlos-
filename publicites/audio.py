@@ -209,8 +209,46 @@ def c4(D):
     mus.add(D - 1.4, pad(48, 1.4, 0.18))
     return mus, sfx, 0.74
 
-DUR = {"c1": 42.5, "c2": 36.6, "c3": 41.0, "c4": 37.6}
-FN = {"c1": c1, "c2": c2, "c3": c3, "c4": c4}
+def tuto(D, bpm, prog, taps, swipes, pops, marks, typing=None, cta=0.0):
+    """Famille sonore du concept 4 : marimba, basse, kick léger, clics d'interface."""
+    mus, sfx = Bus(D), Bus(D); beat = 60 / bpm
+    def inst(b, t, ch, d, i):
+        b.add(t, pad(ch[0], d, 0.1), 0.2)
+        for k in range(8):
+            if t + k * beat / 2 < D - 1.3: b.add(t + k * beat / 2, marimba(ch[[0, 2, 1, 2, 0, 2, 1, 2][k]] + 12 + (12 if k == 7 else 0), 0.5, 0.15), -0.35 + 0.7 * (k % 2))
+        if t >= 3.6:
+            for k in range(4): b.add(t + k * beat, bass(ch[0] - 24, beat * 0.6, 0.3))
+    chords_play(mus, 0.0, D - 1.2, bpm, prog, 4, inst)
+    t = 3.6
+    while t < D - 1.3:
+        mus.add(t, kick(0.45)); mus.add(t + beat / 2, hat(0.12))
+        if int(round((t - 3.6) / beat)) % 2 == 1: mus.add(t, clap(0.18))
+        t += beat
+    sfx.add(0.05, pop(0.4)); sfx.add(0.08, impact(0.3))
+    for i in range(5): sfx.add(1.2 + i * 0.12, tick(0.1))
+    for at in taps: sfx.add(at, click(0.35))
+    for at in swipes: sfx.add(at - 0.05, whoosh(0.45, 0.12), pan=0.4)
+    for at in pops: sfx.add(at, pop(0.2))
+    for at in marks: sfx.add(at, chime(88, 0.06, 0.8))
+    sfx.add(cta - 1.0, riser(1.0, 0.2)); sfx.add(cta, impact(0.5)); sfx.add(cta + 2.0, pop(0.25))
+    mus.add(D - 1.4, pad(48, 1.4, 0.18))
+    return mus, sfx, 0.72
+
+def c5(D):
+    return tuto(D, 104, [[53, 57, 60], [48, 52, 55], [50, 53, 57], [55, 59, 62]],   # F C Dm G
+        taps=[8.3, 26.8, 34.4], swipes=[6.6, 8.7, 10.7, 14.1, 17.1, 23.3, 25.3, 27.2, 29.5],
+        pops=[4.6, 7.6, 8.1, 8.6, 11.7, 12.1, 12.5, 17.1, 18.7, 20.1, 23.3, 25.5, 27.2, 29.5, 32.0, 33.5, 34.1],
+        marks=[14.6, 19.9, 32.0, 33.5], cta=35.7)
+
+def c6(D):
+    return tuto(D, 108, [[48, 52, 55], [57, 60, 64], [53, 57, 60], [55, 59, 62]],   # C Am F G
+        taps=[6.8, 12.1, 15.75, 19.1, 21.4, 25.0, 28.6, 29.2, 35.1, 36.5],
+        swipes=[7.4, 12.7, 17.5, 19.6, 20.6, 23.3, 25.6, 27.7, 29.9, 35.5, 36.9],
+        pops=[3.7, 7.7, 13.0, 15.5, 17.6, 19.6, 21.5, 23.4, 27.8, 32.6, 33.5, 35.0, 37.0],
+        marks=[4.6, 8.2, 9.3, 10.1, 11.1, 13.4, 15.3, 18.2, 24.0, 26.1, 28.2, 30.4, 33.2, 34.4, 37.3], cta=39.3)
+
+DUR = {"c1": 42.5, "c2": 36.6, "c3": 41.0, "c4": 37.6, "c5": 41.8, "c6": 45.4}
+FN = {"c1": c1, "c2": c2, "c3": c3, "c4": c4, "c5": c5, "c6": c6}
 
 for c in sys.argv[1:]:
     D = DUR[c]

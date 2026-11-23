@@ -9,7 +9,9 @@ def trim(a, th=0.008):
     i = np.where(np.abs(a) > th)[0]
     return a[max(i[0] - 200, 0): i[-1] + 900] if len(i) else a
 cfg = json.load(open(sys.argv[3] if len(sys.argv) > 3 else "voix.json"))
+ONLY = sys.argv[4:]
 for c, v in cfg.items():
+    if ONLY and c not in ONLY: continue
     total = 46.0
     track = np.zeros(int(total * SR), np.float32)
     caps = []
