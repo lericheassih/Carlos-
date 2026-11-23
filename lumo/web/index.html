@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>LUMO — rendu</title>
+<style>
+@font-face { font-family: Poppins; font-weight: 300; src: url(../assets/fonts/Poppins-Light.ttf); }
+@font-face { font-family: Poppins; font-weight: 400; src: url(../assets/fonts/Poppins-Regular.ttf); }
+@font-face { font-family: Poppins; font-weight: 500; src: url(../assets/fonts/Poppins-Medium.ttf); }
+@font-face { font-family: Poppins; font-weight: 600; src: url(../assets/fonts/Poppins-SemiBold.ttf); }
+@font-face { font-family: Poppins; font-weight: 700; src: url(../assets/fonts/Poppins-Bold.ttf); }
+@font-face { font-family: Poppins; font-weight: 800; src: url(../assets/fonts/Poppins-ExtraBold.ttf); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: var(--W); height: var(--H); overflow: hidden; background: #071A33; font-family: Poppins, sans-serif; -webkit-font-smoothing: antialiased; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+.scene { position: absolute; inset: 0; overflow: hidden; will-change: transform, opacity; }
+.ph { position: absolute; inset: 0; overflow: hidden; }
+.phi { position: absolute; inset: -6%; background-size: cover; will-change: transform; }
+.grade { position: absolute; inset: 0; }
+.leak { position: absolute; inset: -30%; background: radial-gradient(40% 30% at 70% 30%, rgba(143,211,255,.55), transparent 70%), radial-gradient(30% 25% at 20% 70%, rgba(255,236,210,.35), transparent 70%); mix-blend-mode: screen; }
+.dust { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; }
+.mote { position: absolute; left: 0; top: 0; border-radius: 50%; background: rgba(210,236,255,.9); }
+
+.tb { position: absolute; font-family: Poppins; text-shadow: 0 4px 30px rgba(0,0,0,.25); }
+.tb .ln { display: block; white-space: nowrap; }
+.tb .wm { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .02em .08em; margin-bottom: -.08em; }
+.tb .w { display: inline-block; will-change: transform; transform-origin: 0 100%; }
+.tb .acc { background: linear-gradient(90deg, #8FD3FF, #3FA9F5); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.kbar { display: block; width: 64px; height: 4px; border-radius: 2px; margin-bottom: 22px; transform-origin: 0 50%; }
+.tb[style*="center"] .kbar { margin-left: auto; margin-right: auto; transform-origin: 50% 50%; }
+.chip { position: absolute; padding: 14px 26px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); backdrop-filter: blur(14px); color: #fff; font-weight: 500; font-size: 30px; letter-spacing: .02em; }
+.fh .chip { font-size: 26px; }
+
+.plan3d { position: absolute; transform-style: preserve-3d; }
+.plan3d svg { position: absolute; inset: 0; overflow: visible; }
+.pin { position: absolute; width: 0; height: 0; }
+.pinc { position: absolute; left: -26px; top: -70px; width: 52px; height: 52px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: #fff; box-shadow: 0 0 40px rgba(143,211,255,.9); }
+.pinc::after { content: ''; position: absolute; left: 16px; top: 16px; width: 20px; height: 20px; border-radius: 50%; background: #3FA9F5; }
+.pinr { position: absolute; left: 0; top: 0; width: 60px; height: 60px; border-radius: 50%; border: 3px solid #8FD3FF; }
+.plabel { position: absolute; display: flex; align-items: center; gap: 16px; color: #fff; font-size: 34px; font-weight: 500; padding: 14px 26px 14px 18px; border-radius: 14px; background: rgba(7,26,51,.55); border: 1px solid rgba(143,211,255,.35); backdrop-filter: blur(10px); }
+.fh .plabel { font-size: 30px; }
+.plabel .dot { width: 14px; height: 14px; border-radius: 50%; background: #8FD3FF; box-shadow: 0 0 16px #8FD3FF; }
+
+.card { position: absolute; display: flex; align-items: center; gap: 30px; padding: 30px 34px; border-radius: 28px; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(18px); box-shadow: 0 30px 60px rgba(0,0,0,.25); color: #fff; transition: none; }
+.card.on { background: rgba(255,255,255,.16); border-color: rgba(143,211,255,.6); }
+.card .ic { flex: none; width: 96px; height: 96px; border-radius: 24px; display: grid; place-items: center; background: linear-gradient(135deg, #8FD3FF, #3FA9F5); color: #fff; }
+.card .ic svg { width: 54px; height: 54px; }
+.card .ct { flex: 1; }
+.card .cn { font-size: 22px; letter-spacing: .3em; color: #8FD3FF; font-weight: 600; }
+.card .cl { font-size: 42px; font-weight: 600; line-height: 1.15; }
+.card .cs { font-size: 28px; color: rgba(255,255,255,.75); margin-top: 4px; }
+.fh .card .cl { font-size: 36px; } .fh .card .cs { font-size: 24px; } .fh .card .ic { width: 84px; height: 84px; }
+.card .ck { flex: none; width: 56px; height: 56px; }
+
+.panel { position: absolute; overflow: hidden; border-radius: 28px; box-shadow: 0 30px 70px rgba(0,0,0,.35); }
+.plab { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 30px; background: linear-gradient(0deg, rgba(7,26,51,.85), transparent); }
+.plab span { color: #fff; font-size: 34px; font-weight: 500; }
+.fh .plab span { font-size: 28px; }
+
+.ring { position: absolute; left: 50%; top: 50%; width: 900px; height: 900px; border-radius: 50%; border: 2px solid rgba(63,169,245,.5); }
+.logo { position: absolute; left: 50%; top: 50%; text-align: center; color: #0B2440; overflow: hidden; padding: 20px 40px; }
+.logo .lw { font-size: 190px; font-weight: 600; letter-spacing: .14em; line-height: 1; margin-right: -.14em; background: linear-gradient(180deg, #0B2440, #12406F); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.logo .lline { width: 120px; height: 5px; margin: 26px auto 22px; background: linear-gradient(90deg, #8FD3FF, #3FA9F5); border-radius: 3px; }
+.logo .ls { font-size: 44px; font-weight: 500; letter-spacing: .62em; margin-right: -.62em; color: #3FA9F5; }
+.logo.dark .lw { background: linear-gradient(180deg, #fff, #CFEAFF); -webkit-background-clip: text; background-clip: text; }
+.logo .logoimg { max-width: 760px; max-height: 360px; }
+.sweep { position: absolute; top: -20%; left: 0; width: 30%; height: 140%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent); mix-blend-mode: overlay; }
+
+.world { position: absolute; transform-origin: 50% 50%; }
+.world svg { display: block; }
+.cpin { position: absolute; display: flex; flex-direction: column; align-items: center; transform-origin: 50% 100%; }
+.cpl { order: -1; padding: 12px 24px; margin-bottom: 10px; border-radius: 999px; background: #fff; color: #0B2440; font-weight: 600; font-size: 34px; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.cpd { width: 26px; height: 26px; border-radius: 50%; background: #3FA9F5; border: 5px solid #fff; box-shadow: 0 0 30px rgba(143,211,255,.9); }
+.cityname { position: absolute; color: rgba(255,255,255,.9); font-size: 64px; font-weight: 600; letter-spacing: .5em; }
+
+.pillar { position: absolute; display: flex; align-items: center; gap: 26px; padding: 26px 30px; border-radius: 24px; background: rgba(7,26,51,.45); border: 1px solid rgba(255,255,255,.2); backdrop-filter: blur(16px); color: #fff; }
+.pillar.on { border-color: rgba(143,211,255,.65); }
+.pillar .pi { flex: none; width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center; background: rgba(143,211,255,.18); color: #8FD3FF; }
+.pillar .pi svg { width: 46px; height: 46px; }
+.pillar .pt { font-size: 40px; font-weight: 600; line-height: 1.15; }
+.fh .pillar { flex-direction: column; text-align: center; padding: 40px 30px; } .fh .pillar .pt { font-size: 36px; }
+
+.site { position: absolute; border-radius: 34px; overflow: hidden; background: #fff; box-shadow: 0 50px 120px rgba(0,0,0,.45); transform-origin: 50% 0; }
+.site .bar { height: 78px; display: flex; align-items: center; gap: 12px; padding: 0 28px; background: #F2F7FB; border-bottom: 1px solid #E1EAF2; }
+.site .d { width: 16px; height: 16px; border-radius: 50%; background: #D3DFEA; }
+.site .url { margin-left: 18px; flex: 1; height: 46px; border-radius: 23px; background: #fff; border: 1px solid #DCE6EF; display: flex; align-items: center; gap: 12px; padding: 0 22px; color: #35506E; font-size: 24px; font-weight: 500; }
+.site .url svg { width: 22px; height: 22px; color: #3FA9F5; }
+.site .hero { position: relative; height: 330px; background-size: cover; background-position: center; }
+.site .hg { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,26,51,.1), rgba(7,26,51,.65)); }
+.site .hl { position: absolute; left: 36px; bottom: 28px; color: #fff; font-size: 40px; letter-spacing: .12em; font-weight: 400; }
+.site .hl b { font-weight: 700; } .site .hl img { max-height: 90px; }
+.site .body { padding: 38px 40px 44px; display: flex; flex-direction: column; gap: 26px; }
+.site .lbl { font-size: 24px; letter-spacing: .28em; text-transform: uppercase; color: #3FA9F5; font-weight: 600; }
+.btn { display: flex; align-items: center; justify-content: center; gap: 18px; height: 112px; border-radius: 22px; font-size: 34px; font-weight: 600; letter-spacing: .04em; color: #fff; text-align: center; padding: 0 26px; }
+.btn.b1 { background: linear-gradient(135deg, #5CC0FF, #2E8FE0); box-shadow: 0 18px 40px rgba(46,143,224,.35); }
+.btn.b2 { background: #25D366; font-size: 31px; }
+.btn .wai { width: 54px; height: 54px; flex: none; color: #fff; }
+.btn .arr { font-weight: 400; }
+.site .note { text-align: center; font-size: 22px; color: #6A819A; }
+.tap { position: absolute; width: 90px; height: 90px; border-radius: 50%; background: rgba(255,255,255,.55); border: 3px solid #fff; pointer-events: none; }
+
+.endurl { position: absolute; left: 50%; padding: 22px 46px; border-radius: 999px; background: #0B2440; color: #fff; font-size: 44px; font-weight: 600; letter-spacing: .03em; white-space: nowrap; }
+.endwa { position: absolute; left: 50%; display: flex; align-items: center; gap: 16px; color: #1D9E52; font-size: 34px; font-weight: 500; white-space: nowrap; }
+.endwa .wai { width: 48px; height: 48px; color: #25D366; }
+.legal { position: absolute; left: 0; right: 0; text-align: center; color: #4D6682; font-size: 25px; line-height: 1.4; padding: 0 110px; }
+.fv .endurl { top: 1100px; } .fv .endwa { top: 1260px; } .fv .legal { top: 1440px; }
+.fh .endurl { top: 640px; font-size: 40px; } .fh .endwa { top: 780px; font-size: 30px; } .fh .legal { top: 960px; font-size: 19px; }
+
+.vignette { position: absolute; inset: 0; z-index: 900; pointer-events: none; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.35)); }
+.grain { position: absolute; inset: 0; z-index: 901; pointer-events: none; opacity: .07; mix-blend-mode: overlay; }
+.flash { position: absolute; inset: 0; z-index: 902; pointer-events: none; opacity: 0; background: radial-gradient(70% 60% at 50% 50%, #fff, #EAF6FE 60%, #BFE5FF); }
+.bug { position: absolute; z-index: 903; color: #fff; display: flex; align-items: baseline; gap: 10px; font-size: 30px; letter-spacing: .18em; opacity: 0; text-shadow: 0 2px 14px rgba(0,0,0,.35); }
+.bug b { font-weight: 700; } .bug span { font-size: 18px; letter-spacing: .4em; font-weight: 500; }
+.bug img { height: 54px; }
+.fv .bug { left: 90px; top: 150px; } .fh .bug { left: 90px; top: 70px; }
+.illu { position: absolute; z-index: 903; color: rgba(255,255,255,.85); font-size: 20px; letter-spacing: .06em; padding: 6px 14px; border-radius: 8px; background: rgba(7,26,51,.35); }
+.fv .illu { right: 150px; top: 158px; } .fh .illu { right: 90px; top: 76px; }
+.cap { position: absolute; z-index: 904; left: 50%; max-width: 900px; text-align: center; }
+.cap span { display: inline; padding: 10px 22px; line-height: 1.75; border-radius: 12px; background: rgba(7,26,51,.62); color: #fff; font-weight: 500; font-size: 38px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cap.light span { background: rgba(11,36,64,.85); }
+.fv .cap { bottom: 440px; width: 900px; } .fh .cap { bottom: 64px; width: 1500px; max-width: 1500px; }
+.fh .cap span { font-size: 34px; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="engine.js"></script>
+<script>
+// grain photographique (tuile 512 px, déterministe)
+(function () {
+  const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d'); const d = g.createImageData(512, 512);
+  let s = 12345; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < d.data.length; i += 4) { const v = 128 + (r() - .5) * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
+  g.putImageData(d, 0, 0); window.GRAIN = c.toDataURL();
+  const st = document.createElement('style'); st.textContent = `.grain{background-image:url(${window.GRAIN})}`; document.head.appendChild(st);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+ "_aide": "emplacement -> fichier dans assets/img (remplaçable par vos propres photos)",
+ "v1_hook": {
+  "file": "aerien_quartier.jpg"
+ },
+ "v1_aerial": {
+  "file": "aerien_zenithal.jpg"
+ },
+ "v1_risk": {
+  "file": "aerien_colline.jpg"
+ },
+ "v1_house": {
+  "file": "villa_piscine.jpg"
+ },
+ "v1_street": {
+  "file": "aerien_quartier.jpg"
+ },
+ "v2_hook": {
+  "file": "villa_piscine.jpg"
+ },
+ "v2_salon": {
+  "file": "salon_cuisine.jpg"
+ },
+ "v2_jardin": {
+  "file": "residence_jardin.jpg"
+ },
+ "v2_chambre": {
+  "file": "chambre.jpg"
+ },
+ "v2_kitchen": {
+  "file": "sejour_bois.jpg"
+ },
+ "v2_villa": {
+  "file": "residence_jardin.jpg"
+ },
+ "v2_pool": {
+  "file": "villa_piscine.jpg"
+ },
+ "v3_question": {
+  "file": "sejour_bois.jpg"
+ },
+ "v3_villa": {
+  "file": "villa_piscine.jpg"
+ },
+ "v3_building": {
+  "file": "tropical_jour.jpg"
+ },
+ "v3_hero": {
+  "file": "tropical_coucher.jpg"
+ }
+}

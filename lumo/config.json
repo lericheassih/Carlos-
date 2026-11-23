@@ -1,0 +1,5 @@
+{
+  "site": "votre-site-web.com",
+  "logo": null,
+  "_aide": "Remplacez 'site' par l'adresse réelle et placez le logo officiel dans assets/logo.png puis mettez \"logo\": \"assets/logo.png\". Relancez ensuite scripts/build_all.sh."
+}
