@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, MapPin, Star } from "lucide-react";
+import { Briefcase, Car, ChevronLeft, DoorOpen, KeyRound, MapPin, Snowflake, Star, Waves } from "lucide-react";
+import { MobileBookBar } from "./MobileStay";
 import type { ApartmentSnapshot } from "@/lib/types";
 import type { SiteSettings } from "@/lib/site-settings";
 import type { PublicReview } from "@/lib/public-data";
@@ -26,24 +27,33 @@ export function ApartmentView({ a, s, reviews, preview, initial }: {
   const where = [a.neighborhood, a.city].filter(Boolean).join(", ");
   const bedrooms = [...new Map(images.filter((m) => /^Chambre/.test(m.room ?? "")).map((m) => [m.room!, m])).values()];
   const typeLabel = a.property_type === "villa" ? "Villa entière" : a.property_type === "studio" ? "Studio entier" : a.property_type === "maison" ? "Maison entière" : "Logement entier";
+  const has = (n: string) => a.amenities.some((x) => x.name === n && x.included !== false);
+  const highlights = [
+    has("Arrivée autonome") || has("Boîte à clé sécurisée") ? { icon: KeyRound, title: "Arrivée autonome", text: "Accédez au logement grâce à la boîte à clé sécurisée." } : null,
+    has("Stationnement gratuit sur place") ? { icon: Car, title: "Stationnez gratuitement", text: "Ce logement dispose d'un stationnement gratuit sur place." } : null,
+    has("Espace de travail dédié") ? { icon: Briefcase, title: "Espace de travail dédié", text: "Un coin bureau avec Wifi, idéal pour les séjours professionnels." } : null,
+    has("Balcon") ? { icon: DoorOpen, title: "Balcon privatif", text: "Profitez de l'air extérieur depuis votre balcon." } : null,
+    has("Piscine") ? { icon: Waves, title: "Piscine", text: "Accès à la piscine pendant votre séjour." } : null,
+    has("Climatisation") ? { icon: Snowflake, title: "Climatisation", text: "Logement climatisé pour un séjour au frais." } : null,
+  ].filter(Boolean).slice(0, 3) as { icon: typeof KeyRound; title: string; text: string }[];
   const mapQuery = a.latitude !== null && a.longitude !== null ? `${a.latitude},${a.longitude}` : `${where}, Togo`;
 
   return (
-    <div className="mx-auto max-w-[1120px] px-4 pb-24 pt-2 sm:px-6 sm:pt-6">
+    <div className="apt-page mx-auto max-w-[1120px] px-4 pb-40 pt-0 sm:px-6 sm:pt-6 lg:pb-24">
       {!preview && <TrackOnView type="apartment_view" apartmentId={a.id} />}
-      <Link href="/appartements" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold underline-offset-2 hover:underline"><ChevronLeft className="size-4" /> Tous les logements</Link>
+      <Link href="/appartements" className="mb-3 hidden items-center gap-1 sm:inline-flex text-sm font-semibold underline-offset-2 hover:underline"><ChevronLeft className="size-4" /> Tous les logements</Link>
       <h1 className="mb-4 hidden text-[26px] font-semibold sm:block">{a.name}</h1>
-      <PhotoGallery images={images} name={a.name} />
+      <PhotoGallery images={images} name={a.name} aptId={a.id} />
 
-      <div className="mt-6 grid gap-12 lg:grid-cols-[1fr_372px] lg:gap-24">
+      <div className="relative z-10 -mx-4 -mt-7 grid gap-12 rounded-t-[28px] bg-white px-6 pt-7 sm:mx-0 sm:mt-6 sm:rounded-none sm:px-0 sm:pt-0 lg:grid-cols-[1fr_372px] lg:gap-24">
         <div className="min-w-0">
-          <div className="pb-8">
-            <h1 className="text-[26px] font-semibold leading-tight sm:hidden">{a.name}</h1>
-            <h2 className="mt-2 text-[22px] font-semibold sm:mt-0">{typeLabel} · {where}, Togo</h2>
-            <p className="mt-1 text-base">
+          <div className="pb-7 text-center sm:pb-8 sm:text-left">
+            <h1 className="text-[28px] font-semibold leading-tight sm:hidden">{a.name}</h1>
+            <p className="mt-3 text-base text-slate-500 sm:mt-0 sm:text-[22px] sm:font-semibold sm:text-slate-900">{typeLabel} · {where}, Togo</p>
+            <p className="mt-1 text-base text-slate-500 sm:text-slate-900">
               {plural(a.max_guests, "voyageur")} · {plural(a.bedrooms, "chambre")} · {plural(a.living_rooms, "salon")} · {plural(a.bathrooms, "salle de bain", "salles de bain")}
             </p>
-            <p className="mt-2 flex items-center gap-1 text-base font-semibold">
+            <p className="mt-4 flex items-center justify-center gap-1 text-base font-semibold sm:mt-2 sm:justify-start">
               <Star className="size-4 fill-slate-900" />
               {avg ? <>{avg.toFixed(2).replace(".", ",")} · <span className="underline">{plural(reviews.length, "commentaire")}</span></> : "Nouveau"}
             </p>
@@ -54,10 +64,21 @@ export function ApartmentView({ a, s, reviews, preview, initial }: {
               {s.logo_url ? <Image src={s.logo_url} alt="" fill sizes="48px" className="bg-white object-contain" /> : initials(s.company_name)}
             </span>
             <div>
-              <div className="text-base font-semibold">Hôte : {s.company_name}</div>
-              <div className="text-sm text-slate-500">Réponse rapide sur WhatsApp</div>
+              <div className="text-base font-semibold">Séjournez chez {s.company_name}</div>
+              <div className="text-sm text-slate-500">Hôte professionnel · Réponse rapide sur WhatsApp</div>
             </div>
           </div>
+
+          {highlights.length > 0 && (
+            <section className="space-y-6 border-t border-slate-200 py-8">
+              {highlights.map((h) => (
+                <div key={h.title} className="flex items-start gap-6">
+                  <h.icon className="mt-0.5 size-7 shrink-0" strokeWidth={1.4} />
+                  <div><div className="text-base font-semibold">{h.title}</div><div className="mt-0.5 text-base text-slate-500">{h.text}</div></div>
+                </div>
+              ))}
+            </section>
+          )}
 
           {(a.short_description || a.description) && (
             <section className="border-t border-slate-200 py-8 text-base leading-relaxed">
@@ -155,11 +176,7 @@ export function ApartmentView({ a, s, reviews, preview, initial }: {
         </aside>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 flex items-center justify-between gap-3 border-t border-slate-200 bg-white px-6 py-4 pr-24 lg:hidden">
-        <div className="whitespace-nowrap leading-tight"><span className="text-base font-semibold tabular-nums underline">{fcfa(price.price)}</span> <span className="text-sm">par nuit</span>
-          {a.pricing.min_nights > 1 && <div className="text-xs text-slate-500">{a.pricing.min_nights} nuits minimum</div>}</div>
-        <a href="#reserver" className="rounded-lg bg-[var(--site-primary)] px-6 py-3 text-base font-semibold text-white">Réserver</a>
-      </div>
+      <MobileBookBar aptId={a.id} nightPrice={price.price} minNights={a.pricing.min_nights} />
     </div>
   );
 }

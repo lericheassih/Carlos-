@@ -3,12 +3,12 @@ import { track } from "@/lib/analytics/client";
 import { waLink } from "@/lib/format";
 
 /** Lien WhatsApp suivi (chaque clic est compté, par appartement le cas échéant). */
-export function WhatsAppLink({ number, message, apartmentId, placement, className, children, onClick }: {
-  number: string; message: string; apartmentId?: string; placement: string; className?: string; children: React.ReactNode; onClick?: () => void;
+export function WhatsAppLink({ number, message, apartmentId, placement, className, children, onClick, id }: {
+  number: string; message: string; apartmentId?: string; placement: string; className?: string; children: React.ReactNode; onClick?: () => void; id?: string;
 }) {
   if (!number) return null;
   return (
-    <a href={waLink(number, message)} target="_blank" rel="noopener noreferrer" className={className}
+    <a id={id} href={waLink(number, message)} target="_blank" rel="noopener noreferrer" className={className}
       onClick={() => { track("whatsapp_click", { apartment_id: apartmentId, metadata: { placement } }); onClick?.(); }}>
       {children}
     </a>

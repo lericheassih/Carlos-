@@ -7,6 +7,7 @@ import { addDays, diffDays, isIsoDate, parseIso, todayIso, toIso } from "@/lib/d
 import { dateFr, fcfa, waLink } from "@/lib/format";
 import { track } from "@/lib/analytics/client";
 import { WhatsAppIcon } from "./WhatsAppIcon";
+import { QUOTE_EVENT, type QuoteEvent } from "./MobileStay";
 
 type Range = { start_date: string; end_date: string };
 type Props = {
@@ -81,6 +82,12 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
     done ? `Référence de ma demande : ${done.reference}` : "",
     "Est-ce disponible ?",
   ].filter(Boolean).join("\n");
+
+  // Informe la barre de réservation mobile (prix total, dates, lien WhatsApp)
+  useEffect(() => {
+    const detail: QuoteEvent = { aptId: apartment.id, nights, total: q?.total ?? 0, start: start ?? "", end: end ?? "", valid, waLink: whatsapp ? waLink(whatsapp, waMsg) : null };
+    window.dispatchEvent(new CustomEvent(QUOTE_EVENT, { detail }));
+  }, [apartment.id, nights, q?.total, start, end, valid, whatsapp, waMsg]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

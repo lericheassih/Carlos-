@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, ClipboardList, DoorOpen, Grid2x2, CalendarX,
 import type { PublicAmenity, PublicMedia } from "@/lib/types";
 import { AmenityIcon } from "@/components/AmenityIcon";
 import { ZoomViewer } from "./ZoomViewer";
+import { FloatingActions } from "./MobileStay";
 
 /* ---------- Feuille plein écran (mobile) / fenêtre (ordinateur) ---------- */
 export function Sheet({ open, onClose, title, children, wide, footer }: {
@@ -68,7 +69,7 @@ function Mosaic({ items, name, onOpen }: { items: PublicMedia[]; name: string; o
   );
 }
 
-export function PhotoGallery({ images, name }: { images: PublicMedia[]; name: string }) {
+export function PhotoGallery({ images, name, aptId }: { images: PublicMedia[]; name: string; aptId: string }) {
   const [tour, setTour] = useState(false);
   const [zoom, setZoom] = useState<{ list: PublicMedia[]; i: number } | null>(null);
   const [idx, setIdx] = useState(0);
@@ -87,13 +88,14 @@ export function PhotoGallery({ images, name }: { images: PublicMedia[]; name: st
       <div className="relative -mx-4 sm:hidden">
         <div className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]" onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}>
           {images.map((m, i) => (
-            <button key={m.id} className="relative aspect-[4/3] w-full shrink-0 snap-center" onClick={() => openPhoto(i)} aria-label={`Photo ${i + 1}`}>
+            <button key={m.id} className="relative aspect-[1/1.05] w-full shrink-0 snap-center" onClick={() => openPhoto(i)} aria-label={`Photo ${i + 1}`}>
               <Image src={m.url} alt={m.alt || name} fill sizes="100vw" priority={i === 0} className="object-cover" />
             </button>
           ))}
         </div>
-        <span className="absolute bottom-3 right-3 rounded-md bg-black/60 px-2 py-0.5 text-xs tabular-nums text-white">{idx + 1} / {images.length}</span>
-        <button onClick={() => setTour(true)} className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold shadow-sm"><Grid2x2 className="size-3.5" /> Visite photo</button>
+        <FloatingActions aptId={aptId} name={name} />
+        <span className="absolute bottom-11 right-4 rounded-lg bg-black/70 px-2.5 py-1 text-sm font-medium tabular-nums text-white">{idx + 1} / {images.length}</span>
+        <button onClick={() => setTour(true)} className="absolute bottom-11 left-4 flex items-center gap-1.5 rounded-lg bg-white/95 px-2.5 py-1 text-sm font-semibold shadow-sm"><Grid2x2 className="size-4" /> Visite photo</button>
       </div>
       <div className="relative hidden h-[440px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl sm:grid">
         {five.map((m, i) => (

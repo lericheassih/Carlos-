@@ -84,7 +84,7 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
 export function WhatsAppFab({ s }: { s: SiteSettings }) {
   return (
     <WhatsAppLink number={s.whatsapp} message={`Bonjour ${s.company_name}, j'aimerais réserver un appartement.`} placement="floating"
-      className="fixed bottom-5 right-4 z-30 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/20 transition hover:scale-105 sm:right-6">
+      id="wa-fab" className="fixed bottom-5 right-4 z-30 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/20 transition hover:scale-105 sm:right-6">
       <span className="sr-only">Nous écrire sur WhatsApp</span>
       <WhatsAppIcon className="size-7" />
     </WhatsAppLink>
