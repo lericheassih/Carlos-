@@ -515,7 +515,7 @@ select 1, s, s, now() from (select jsonb_build_object(
   'primary_color', '#FF385C',
   'accent_color', '#E61E4D',
   'hero_title', 'Votre appartement meublé à Lomé',
-  'hero_subtitle', 'Des logements entièrement équipés pour vos séjours d''affaires, vos vacances ou votre retour au pays. Réservation simple et rapide sur WhatsApp.',
+  'hero_subtitle', 'Choisissez votre logement comme sur Airbnb et réservez directement sur WhatsApp.',
   'hero_images', '[]'::jsonb,
   'about_title', 'Pourquoi séjourner chez nous',
   'about_text', 'Nous proposons des appartements meublés soigneusement entretenus, situés dans des quartiers calmes et sécurisés de Lomé.',
