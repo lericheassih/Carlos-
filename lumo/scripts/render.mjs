@@ -14,17 +14,20 @@ const { buildStoryboard } = await import(pathToFileURL(path.join(ROOT, 'web', 's
 const FPS = 30;
 const [mode, nStr, fmt = 'v', arg] = process.argv.slice(2); const n = +nStr;
 
-const tl = JSON.parse(fs.readFileSync(path.join(B, `timeline${n}.json`)));
+const MD = process.env.CUT === 'motion';   // version motion design pur (sans voix, sans photo)
+const PFX = MD ? 'md' : '';
+const tl = MD ? null : JSON.parse(fs.readFileSync(path.join(B, `timeline${n}.json`)));
 const imgMap = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'img', 'images.json')));
 const IMG = {}; for (const k in imgMap) if (!k.startsWith('_')) IMG[k] = pathToFileURL(path.join(ROOT, 'assets', 'img', imgMap[k].file)).href;
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json')));
 if (cfg.logo) cfg.logo = pathToFileURL(path.join(ROOT, cfg.logo)).href;
-const sb = buildStoryboard(n, fmt, tl, IMG);
+const { buildMotion } = await import(pathToFileURL(path.join(ROOT, 'web', 'motion_sb.mjs')));
+const sb = MD ? buildMotion(n, fmt) : buildStoryboard(n, fmt, tl, IMG);
 
 if (mode === 'plan') {
   const { scenes, ...rest } = sb;
-  fs.writeFileSync(path.join(B, `plan${n}.json`), JSON.stringify({ ...rest, scenes: scenes.map(s => ({ type: s.type, start: s.start })) }, null, 1));
-  console.log(`plan${n}.json  durée ${sb.duration}s`); process.exit(0);
+  fs.writeFileSync(path.join(B, `plan${PFX}${n}.json`), JSON.stringify({ ...rest, scenes: scenes.map(s => ({ type: s.type, start: s.start })) }, null, 1));
+  console.log(`plan${PFX}${n}.json  durée ${sb.duration}s`); process.exit(0);
 }
 
 const W = fmt === 'v' ? 1080 : 1920, H = fmt === 'v' ? 1920 : 1080;
@@ -49,7 +52,7 @@ async function shot(page, t, file) {
 }
 
 const browser = await chromium.launch({ args: ['--disable-gpu-vsync', '--force-color-profile=srgb'] });
-const tag = `${n}${fmt}`;
+const tag = `${PFX}${n}${fmt}`;
 if (mode === 'stills') {
   const dir = path.join(B, 'stills'); fs.mkdirSync(dir, { recursive: true });
   const page = await openPage(browser);
@@ -67,8 +70,8 @@ if (mode === 'stills') {
     }
   }));
   await browser.close();
-  const out = path.join(X, `LUMO_V${n}_${fmt === 'v' ? '9x16' : '16x9'}.mp4`);
-  const r = spawnSync('ffmpeg', ['-v', 'error', '-y', '-framerate', String(FPS), '-i', path.join(dir, '%05d.jpg'), '-i', path.join(B, `mix${n}.wav`),
+  const out = path.join(X, `LUMO_${MD ? 'MOTION_' : ''}V${n}_${fmt === 'v' ? '9x16' : '16x9'}.mp4`);
+  const r = spawnSync('ffmpeg', ['-v', 'error', '-y', '-framerate', String(FPS), '-i', path.join(dir, '%05d.jpg'), '-i', path.join(B, `mix${PFX}${n}.wav`),
     '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-maxrate', '10M', '-bufsize', '20M', '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', String(FPS),
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
     '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000', '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', out], { stdio: 'inherit' });

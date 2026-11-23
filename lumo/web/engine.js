@@ -35,10 +35,16 @@ const TSTYLE = {
   body: () => ({ size: V(40, 34), weight: 400, ls: '0', color: 'rgba(255,255,255,.86)', lh: 1.4 }),
   dark1: () => ({ size: V(88, 80), weight: 600, ls: '-.015em', color: C.ink, lh: 1.08 }),
   dark2: () => ({ size: V(46, 40), weight: 400, ls: '0', color: '#35506E', lh: 1.35 }),
+  // variantes pour fonds clairs (motion design)
+  kickerD: () => ({ size: V(30, 26), weight: 600, ls: '.32em', upper: true, color: '#1F7FD0', lh: 1.3, light: true }),
+  heroD: () => ({ size: V(120, 112), weight: 700, ls: '-.02em', color: C.ink, lh: 1.02, light: true }),
+  h1D: () => ({ size: V(92, 84), weight: 600, ls: '-.015em', color: C.ink, lh: 1.08, light: true }),
+  h2D: () => ({ size: V(60, 52), weight: 500, ls: '-.01em', color: C.ink, lh: 1.15, light: true }),
+  bodyD: () => ({ size: V(40, 34), weight: 400, ls: '0', color: '#4A6582', lh: 1.4, light: true }),
 };
 function buildText(parent, spec) {
   const st = TSTYLE[spec.style || 'h1']();
-  const box = el('div', 'tb', parent);
+  const box = el('div', 'tb' + (st.light ? ' onlight' : ''), parent);
   Object.assign(box.style, {
     left: spec.x + 'px', top: spec.y + 'px', fontSize: st.size + 'px', fontWeight: st.weight,
     letterSpacing: st.ls, color: st.color, lineHeight: st.lh, textAlign: spec.align || 'left',
@@ -376,13 +382,14 @@ SCENES.pillars = {
 // Appel à l'action : maquette du site + boutons
 SCENES.cta = {
   build(s, root) {
-    root.style.background = `radial-gradient(110% 80% at 50% 30%, ${C.navy2}, ${C.navy})`;
-    s._ph = photoLayer(root, s.img, { filter: 'blur(22px) saturate(1.1) brightness(.6)' }); s._ph.wrap.style.opacity = .55;
-    s._dust = buildDust(root, 16, 4);
+    root.style.background = s.light ? `radial-gradient(110% 80% at 50% 30%, #FFFFFF, ${C.ice})` : `radial-gradient(110% 80% at 50% 30%, ${C.navy2}, ${C.navy})`;
+    if (s.img) { s._ph = photoLayer(root, s.img, { filter: 'blur(22px) saturate(1.1) brightness(.6)' }); s._ph.wrap.style.opacity = .55; }
+    if (s.deco && window.buildDeco) s._deco = window.buildDeco(root, s.deco, s);
+    s._dust = buildDust(root, 16, 4); if (s.light) s._dust.d.style.opacity = 0;
     const site = el('div', 'site', root); Object.assign(site.style, s.site[FMT]); s._site = site;
     site.innerHTML = `
       <div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><div class="url">${ICONS.lock}<span>${CFG.site}</span></div></div>
-      <div class="hero" style="background-image:url('${s.img}')"><div class="hg"></div><div class="hl">${CFG.logo ? `<img src="${CFG.logo}">` : '<b>LUMO</b> IMMOBILIER'}</div></div>
+      <div class="hero" style="${s.img ? `background-image:url('${s.img}')` : 'background:linear-gradient(135deg,#0D2B52,#1F6FB8 60%,#5CC0FF)'}">${!s.img && window.heroArt ? window.heroArt() : ''}<div class="hg"></div><div class="hl">${CFG.logo ? `<img src="${CFG.logo}">` : '<b>LUMO</b> IMMOBILIER'}</div></div>
       <div class="body"><div class="lbl">Sur notre site web</div>
         <div class="btn b1">DÉCOUVRIR NOS SERVICES <span class="arr">→</span></div>
         <div class="btn b2">${ICONS.wa}<span>PARLER À UN CONSEILLER SUR WHATSAPP</span></div>
@@ -392,7 +399,8 @@ SCENES.cta = {
     (s.texts || []).forEach(x => buildText(root, x));
   },
   update(s, t) {
-    camera(s._ph, pr(t, s.start, s.end), [1.2, 0, 0], [1.1, 0, 0]);
+    if (s._ph) camera(s._ph, pr(t, s.start, s.end), [1.2, 0, 0], [1.1, 0, 0]);
+    if (s._deco) window.updateDeco(s._deco, t, s);
     updateDust(s._dust, t);
     const q = E.outExpo(pr(t, s.siteAt, s.siteAt + 1.3));
     s._site.style.opacity = q;
@@ -417,7 +425,7 @@ SCENES.end = {
     s._logo = logoBlock(root, false); s._sweep = el('div', 'sweep', s._logo);
     s._url = el('div', 'endurl', root, `<span>${CFG.site}</span>`);
     s._wa = el('div', 'endwa', root, `${ICONS.wa}<span>Parlez à un conseiller depuis notre site</span>`);
-    s._legal = el('div', 'legal', root, "Visuels d'illustration. Ils ne représentent pas des biens commercialisés par LUMO IMMOBILIER.");
+    s._legal = el('div', 'legal', root, s.legal ?? "Visuels d'illustration. Ils ne représentent pas des biens commercialisés par LUMO IMMOBILIER.");
   },
   update(s, t) {
     const lt = t - s.start, q = E.outExpo(pr(lt, 0, 1.2));
@@ -439,6 +447,13 @@ const ICONS = {
   build: '<svg viewBox="0 0 24 24"><path d="M3 21h18 M5 21V9l5-3v15 M10 21V4l9 4v13 M13 10h3 M13 13h3 M13 16h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
   plane: '<svg viewBox="0 0 24 24"><path d="M2.5 13.5 21 6l-3.5 13-5.2-4.3L9 18v-4.6z M12.3 14.7 21 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
   heart: '<svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  tree: '<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 15v6 M9 21h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  expand: '<svg viewBox="0 0 24 24"><path d="M4 9V4h5 M20 9V4h-5 M4 15v5h5 M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  moon: '<svg viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  family: '<svg viewBox="0 0 24 24"><circle cx="8" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="13" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c0-3 2-5 4.5-5 M20.5 19c0-3-2-5-4.5-5 M8.5 21c0-2 1.5-3.5 3.5-3.5s3.5 1.5 3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  wallet: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 9.5h18 M16 14h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  globe: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18 M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+  route: '<svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
   check: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#3FA9F5"/><path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   lock: '<svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>',
   wa: '<svg class="wai" viewBox="0 0 24 24"><path d="M12 2.6a9.3 9.3 0 0 0-8 14.1L2.8 21.3l4.8-1.2A9.3 9.3 0 1 0 12 2.6z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.6 7.6c.3-.6.6-.6.9-.6h.6c.2 0 .4.1.5.4l.8 1.9c.1.2 0 .5-.1.6l-.6.7c-.1.2-.1.4 0 .6.7 1.2 1.6 2.1 2.8 2.8.2.1.4.1.6 0l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.3.3.5 0 .6-.2 1.3-.7 1.7-.6.5-1.4.7-2.2.5-2.9-.8-5.2-3.1-6-6-.2-.8 0-1.5.4-2.1z" fill="currentColor"/></svg>',
@@ -503,6 +518,8 @@ function renderFrame(t) {
   // logo discret après la révélation de marque, masqué sur les plans de marque
   const b = SB.bug; const bon = b && t > b[0] && t < b[1]; const bq = b ? E.outCubic(pr(t, b[0], b[0] + .6)) * (1 - pr(t, b[1] - .3, b[1])) : 0;
   GLOBAL.bug.style.opacity = bon ? bq : 0;
+  let cur_s = S[0]; for (const sc of S) if (t >= sc.start) cur_s = sc;
+  GLOBAL.bug.classList.toggle('dk', !(cur_s.dark || ['world', 'city', 'cadastre', 'photo', 'steps', 'pillars'].includes(cur_s.type) || (cur_s.type === 'cta' && !cur_s.light)));
   const ill = SB.illu ? (t > SB.illu[0] && t < SB.illu[1] ? 1 : 0) * pr(t, SB.illu[0], SB.illu[0] + .5) * (1 - pr(t, SB.illu[1] - .4, SB.illu[1])) : 0;
   GLOBAL.illu.style.opacity = ill * .8;
   // sous-titres

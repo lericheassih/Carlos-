@@ -228,6 +228,16 @@ def sfx_track(plan):
     return fx + 0.3 * wet
 
 
+def main_motion(n):
+    """version motion design : pas de voix, la musique porte le film."""
+    plan = json.load(open(os.path.join(B, f"planmd{n}.json")))
+    music = compose(n, plan); fx = sfx_track(plan)
+    mix = music * 0.9 + fx * 0.8
+    mix /= max(1e-6, np.max(np.abs(mix))) / 0.95
+    sf.write(os.path.join(B, f"mixmd{n}.wav"), mix.astype(np.float32), SR)
+    print(f"mixmd{n}.wav {plan['duration']:.1f} s")
+
+
 def main(n):
     plan = json.load(open(os.path.join(B, f"plan{n}.json")))
     total = plan["duration"]; N = int(total * SR)
@@ -259,4 +269,4 @@ def main(n):
 
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]))
+    (main_motion if len(sys.argv) > 2 and sys.argv[2] == "motion" else main)(int(sys.argv[1]))

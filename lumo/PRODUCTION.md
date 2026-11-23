@@ -8,6 +8,27 @@ Trois publicités de motion design, chacune en **9:16 (1080×1920)** et en **16:
 | `export/LUMO_V2_9x16.mp4` · `export/LUMO_V2_16x9.mp4` | Acheter une villa ou une maison | ≈ 43 s |
 | `export/LUMO_V3_9x16.mp4` · `export/LUMO_V3_16x9.mp4` | Investir au Togo depuis l'étranger (diaspora) | ≈ 41 s |
 
+
+## ★ Version retenue : « Motion design pur » (sans voix off, sans photo)
+
+Ces fichiers sont à diffuser :
+`export/LUMO_MOTION_V1_9x16.mp4`, `_V1_16x9`, `_V2_9x16`, `_V2_16x9`, `_V3_9x16` et `_V3_16x9`. Durées : 42 s, 43 s et 38 s.
+
+- **Aucune image de banque d'images.** Tout est dessiné : la parcelle isométrique avec ses bornes, la maison qui s'élève sur le terrain, la villa tracée au trait qui « s'allume », la carte du monde vers Lomé, le plan stylisé de Lomé, et les volumes de patrimoine qui montent.
+- **Aucune voix.** Le texte à l'écran porte le message, et la musique originale est mise en avant.
+- **La confiance passe par trois éléments :**
+  - la démarche expliquée en 3 étapes concrètes ;
+  - une conversation sur téléphone avec un conseiller LUMO, qui montre le contact humain ;
+  - un fond clair aux couleurs de la marque, qui donne une image sobre et professionnelle.
+- **Le spectateur est interpellé directement :**
+  - « Vous cherchez un terrain à Lomé ? »
+  - « Vous cherchez une villa ou une maison ? »
+  - « Vous vivez à l'étranger ? »
+- La structure reste la même : accroche, problème, LUMO, accompagnement, conversation, appel à l'action vers le site et le bouton WhatsApp, carte de fin.
+- La production se relance avec `./scripts/build_motion.sh`. Les storyboards se trouvent dans `web/motion_sb.mjs`.
+
+La version avec voix off et photos décrite ci-dessous reste disponible comme archive.
+
 ---
 
 ## 1. Stratégie commune
