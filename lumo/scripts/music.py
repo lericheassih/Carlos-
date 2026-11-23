@@ -32,6 +32,8 @@ STYLES = {
             arp=[0, 1, 2, 3, 2, 1, 3, 2], bright=0.8),
     3: dict(bpm=98, prog=["A1|A2 C3 E3 B3", "F1|F2 A2 C3 E3", "C2|C3 E3 G3 D4", "G1|G2 B2 D3 A3"],
             arp=[0, 3, 1, 3, 2, 3, 1, 3], bright=1.1),
+    4: dict(bpm=96, prog=["G1|G2 B2 D3 A3", "D2|D3 F#3 A3 E4", "E2|E3 G3 B3 D4", "C2|C3 E3 G3 B3"],
+            arp=[0, 2, 1, 3, 2, 1, 3, 2], bright=1.15),
 }
 # niveau de chaque couche par section (pad, piano, basse, pulsation, cordes aiguës)
 LEVELS = {

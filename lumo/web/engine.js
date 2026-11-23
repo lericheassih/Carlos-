@@ -424,7 +424,7 @@ SCENES.end = {
     root.style.background = `radial-gradient(90% 70% at 50% 45%, #FFFFFF, ${C.ice})`;
     s._logo = logoBlock(root, false); s._sweep = el('div', 'sweep', s._logo);
     s._url = el('div', 'endurl', root, `<span>${CFG.site}</span>`);
-    s._wa = el('div', 'endwa', root, `${ICONS.wa}<span>Parlez à un conseiller depuis notre site</span>`);
+    s._wa = el('div', 'endwa', root, `${ICONS.wa}<span>${s.waText || 'Parlez à un conseiller depuis notre site'}</span>`);
     s._legal = el('div', 'legal', root, s.legal ?? "Visuels d'illustration. Ils ne représentent pas des biens commercialisés par LUMO IMMOBILIER.");
   },
   update(s, t) {

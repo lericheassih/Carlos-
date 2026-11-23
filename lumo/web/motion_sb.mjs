@@ -109,8 +109,50 @@ export function buildMotion(n, fmt) {
     ];
     secs = [['hook', 0], ['probleme', 4.6], ['solution', 9.4], ['confiance', 22.6], ['cta', 28.2], ['fin', 34.0]];
   }
+
+  if (n === 4) { // Exemple : appartements meublés à Lomé
+    const apts = ['Studio meublé', 'Appartement 1 chambre', 'Appartement 2 chambres'];
+    S = [
+      { type: 'title', dark: true, deco: 'blueprint', start: 0,
+        texts: [K('Appartements meublés · Lomé', .15, true), T(v ? 'Vous cherchez|un appartement|meublé|à Lomé ?' : 'Vous cherchez un|appartement meublé|à Lomé ?', .3, 'hero', TOP + V(80, 64), { accent: ['meublé'] })] },
+      { type: 'chips', start: 3.6, enter: 'wipe',
+        wrap: { v: { left: '90px', top: '700px', width: '900px' }, h: { left: '130px', top: '470px', width: '1660px' } },
+        items: [{ icon: 'build', t: 'En mission', at: 4.3 }, { icon: 'moon', t: 'En vacances', at: 4.8 }, { icon: 'plane', t: 'De passage', at: 5.3 },
+                { icon: 'family', t: 'En famille', at: 5.8 }, { icon: 'home', t: 'Retour au pays', at: 6.3 }],
+        texts: [K('Pour votre séjour', 3.7), T('Un chez-vous,|dès votre arrivée.', 3.85, 'h1D', TOP + V(80, 64), { accent: ['chez-vous,'] })] },
+      { ...brand(8.2, 'Appartements meublés|à Lomé') },
+      { type: 'draw', art: 'room', start: 10.8, enter: 'zoom', box: { v: [100, 700, 880], h: [880, 40, 1000] }, artAt: .1,
+        labels: [{ t: 'Salon', at: 13.6, pos: { v: { left: '90px', top: '1400px' }, h: { left: '130px', top: '600px' } } },
+                 { t: 'Chambre', at: 14.0, pos: { v: { left: '310px', top: '1400px' }, h: { left: '130px', top: '700px' } } },
+                 { t: 'Entièrement meublé', at: 14.4, pos: { v: { left: '570px', top: '1400px' }, h: { left: '130px', top: '800px' } } }],
+        texts: [K('Nos appartements meublés', 10.9), T('Posez vos valises,|vous êtes chez vous.', 11.05, 'h1D', TOP + V(80, 64), { accent: ['chez', 'vous.'] })] },
+      { type: 'cards', start: 16.6, enter: 'slide', line: false, numLabel: 'CHOIX',
+        grid: { v: { x: 90, y: 720, dy: 240, w: 900 }, h: { x: 980, y: 220, dy: 250, w: 820 } },
+        items: [{ icon: 'home', t: apts[0], s: 'Pour une personne ou un couple', at: 17.3 },
+                { icon: 'home', t: apts[1], s: 'Plus d’espace, une chambre séparée', at: 18.3 },
+                { icon: 'family', t: apts[2], s: 'Pour la famille ou entre collègues', at: 19.3 }],
+        texts: [K('Plusieurs formats', 16.7), T('L’appartement|qu’il vous faut.', 16.85, 'h1D', TOP + V(80, 64), { accent: ['vous', 'faut.'] })] },
+      { type: 'booking', start: 22.0, enter: 'wipe', phoneAt: 22.2, pick: 1, apts,
+        phone: { v: { left: '260px', top: '690px', width: '560px', height: '810px' }, h: { left: '1180px', top: '70px', width: '560px', height: '940px' } },
+        pages: [24.6, 27.8, 30.0], taps: [24.1, 27.2, 29.5],
+        steps: [{ t: 'Cliquez sur « Réserver »', at: 22.6, until: 25.6, pos: { v: { left: '90px', top: '410px' }, h: { left: '130px', top: '420px' } } },
+                { t: 'Choisissez votre appartement', at: 25.6, until: 29.3, pos: { v: { left: '90px', top: '500px' }, h: { left: '130px', top: '530px' } } },
+                { t: 'Réservez sur WhatsApp', at: 29.3, pos: { v: { left: '90px', top: '590px' }, h: { left: '130px', top: '640px' } } }],
+        msgs: [{ me: true, t: 'Bonjour, je souhaite réserver l’appartement 1 chambre.', at: 31.0, tm: '09:12' },
+               { me: false, t: 'Bonjour ! Avec plaisir. Pour quelles dates ?', at: 33.0, tm: '09:13' }],
+        texts: [K('Réserver en 3 étapes', 22.1), ...(v ? [] : [T('Réserver,|c’est simple.', 22.25, 'h1D', TOP + 64, { accent: ['simple.'] })])] },
+      { type: 'bigcta', start: 35.0, enter: 'zoom', btnAt: 35.9,
+        btn: { v: { left: '50%', top: '760px', width: '760px' }, h: { left: '50%', top: '450px', width: '700px' } },
+        sub: 'Choisissez votre appartement sur notre site,<br>puis réservez via WhatsApp.',
+        subPos: { v: { left: '90px', width: '900px', top: '960px' }, h: { left: '260px', width: '1400px', top: '640px' } },
+        urlPos: { v: { left: '50%', top: '1140px' }, h: { left: '50%', top: '790px' } },
+        texts: [T('Réservez votre|appartement meublé.', 35.15, 'h1D', V(420, 180), { x: V(90, 160), align: 'center', w: V(900, 1600), accent: ['meublé.'] })] },
+      { ...end(39.5), legal: 'Appartements meublés · Lomé, Togo', waText: 'Réservation via WhatsApp depuis notre site' },
+    ];
+    secs = [['hook', 0], ['probleme', 3.6], ['solution', 8.2], ['confiance', 16.6], ['cta', 35.0], ['fin', 39.5]];
+  }
   S.forEach(s => (s.texts = (s.texts || []).filter(Boolean)));
-  const endS = S[S.length - 1], total = endS.start + 4.2, brandS = S.find(s => s.type === 'brand'), ctaS = S.find(s => s.type === 'cta');
+  const endS = S[S.length - 1], total = endS.start + 4.2, brandS = S.find(s => s.type === 'brand'), ctaS = S.find(s => s.type === 'cta' || s.type === 'bigcta');
   const sfx = [];
   S.forEach((s, i) => {
     if (i === 0) { sfx.push({ type: 'impact', t: 0.05 }); return; }
@@ -121,6 +163,11 @@ export function buildMotion(n, fmt) {
     (s.icons || []).forEach(it => sfx.push({ type: 'pop', t: it.at + .1 }));
     (s.pins || []).forEach(p => sfx.push({ type: 'pop', t: p.at + .1 }));
     (s.msgs || []).forEach(m => sfx.push({ type: 'pop', t: m.at + .05 }));
+    (s.taps || []).forEach(x => sfx.push({ type: 'pop', t: x + .02 }));
+    (s.pages || []).forEach(x => sfx.push({ type: 'whoosh', t: x + .25, dur: .6, pan: .3 }));
+    (s.steps || []).forEach(x => sfx.push({ type: 'tick', t: x.at + .05 }));
+    if (s.type === 'bigcta') sfx.push({ type: 'pop', t: s.btnAt + .05 }, { type: 'pop', t: s.btnAt + 1.9 });
+    if (s.art === 'room') [1.3, 1.6, 2.0, 2.3, 2.6, 2.9, 3.2].forEach(k => sfx.push({ type: 'tick', t: s.start + s.artAt + k + .1 }));
     (s.labels || []).forEach(l => sfx.push({ type: 'tick', t: l.at + .05 }));
     if (s.art === 'plot' && !s.opt) [0, 1, 2, 3].forEach(k => sfx.push({ type: 'tick', t: s.start + s.artAt + 1.5 + k * .18 }));
     if (s.opt && s.opt.house) sfx.push({ type: 'whoosh', t: s.opt.houseAt + .3, dur: 1.0 });

@@ -189,6 +189,7 @@ SCENES.draw = {
     for (const q of s._art.P) {
       if (q.kind === 'pop') { const k = E.outBack(pr(t, q.a, q.a + .55)); q.el.setAttribute('opacity', clamp(k * 2)); q.el.setAttribute('transform', `translate(${q.x} ${q.y}) scale(${Math.max(0, k)}) translate(${-q.x} ${-q.y})`); }
       else if (q.kind === 'sun') { const k = E.outCubic(pr(t, q.a, q.a + 1)); q.el.setAttribute('opacity', k); q.el.setAttribute('transform', `translate(0 ${(1 - k) * 80})`); }
+      else if (q.kind === 'drop') { const k = E.outBack(pr(t, q.a, q.a + .6)); q.el.setAttribute('opacity', clamp(pr(t, q.a, q.a + .25))); q.el.setAttribute('transform', `translate(0 ${(1 - k) * -90})`); }
       else if (q.kind === 'grow') { const k = E.outExpo(pr(t, q.a, q.a + q.dur)); q.el.setAttribute('opacity', pr(t, q.a, q.a + .2)); q.el.setAttribute('transform', `translate(0 ${q.base}) scale(1 ${Math.max(.001, k)}) translate(0 ${-q.base})`); }
       else q.el.setAttribute('opacity', E.outCubic(pr(t, q.a, q.a + .8)));
     }
@@ -204,7 +205,7 @@ SCENES.cards = {
     s._deco = buildDeco(root, s.deco || 'blueprint', s);
     (s.texts || []).forEach(x => buildText(root, x));
     s._cards = s.items.map((it, i) => {
-      const c = el('div', 'card lightc', root, `<div class="ic">${ICONS[it.icon]}</div><div class="ct"><div class="cn">ÉTAPE 0${i + 1}</div><div class="cl">${it.t}</div><div class="cs">${it.s || ''}</div></div><div class="ck">${ICONS.check}</div>`);
+      const c = el('div', 'card lightc', root, `<div class="ic">${ICONS[it.icon]}</div><div class="ct"><div class="cn">${s.numLabel || 'ÉTAPE'} 0${i + 1}</div><div class="cl">${it.t}</div><div class="cs">${it.s || ''}</div></div><div class="ck">${ICONS.check}</div>`);
       const g = s.grid[FMT]; Object.assign(c.style, { left: (g.x + i * (g.dx || 0)) + 'px', top: (g.y + i * (g.dy || 0)) + 'px', width: g.w + 'px' });
       return { c, at: it.at };
     });
@@ -314,3 +315,138 @@ window.heroArt = () => `<svg viewBox="0 0 1000 330" preserveAspectRatio="xMidYMa
   <path d="M80 300 L920 300"/><path d="M300 300 V200 H620 V300"/><path d="M380 200 V140 H720 V200"/><path d="M360 132 H740"/>
   <path d="M410 155 H560 V190 H410 Z"/><path d="M600 155 H690 V190 H600 Z"/><path d="M330 220 H470 V290 H330 Z"/><path d="M520 230 H560 V300"/>
   <path d="M780 300 Q770 240 790 190"/><path d="M790 190 Q750 175 730 200 M790 190 Q830 170 850 200 M790 190 Q800 160 810 150"/></g></svg>`;
+
+/* =================================================================== APPARTEMENTS MEUBLÉS */
+// prisme isométrique (3 faces visibles) dans un groupe
+function isoBox(g, iso, x1, y1, x2, y2, z1, z2, col) {
+  const [top, left, right] = col;
+  svgEl('path', { d: poly([iso(x1, y2, z1), iso(x2, y2, z1), iso(x2, y2, z2), iso(x1, y2, z2)]), fill: left, stroke: INK, 'stroke-width': 2.2, 'stroke-linejoin': 'round' }, g);
+  svgEl('path', { d: poly([iso(x2, y1, z1), iso(x2, y2, z1), iso(x2, y2, z2), iso(x2, y1, z2)]), fill: right, stroke: INK, 'stroke-width': 2.2, 'stroke-linejoin': 'round' }, g);
+  svgEl('path', { d: poly([iso(x1, y1, z2), iso(x2, y1, z2), iso(x2, y2, z2), iso(x1, y2, z2)]), fill: top, stroke: INK, 'stroke-width': 2.2, 'stroke-linejoin': 'round' }, g);
+}
+const WOOD = ['#E9D3B8', '#D3B28C', '#BF9A70'], WHITE = ['#FFFFFF', '#EEF4F9', '#DCE7F0'], BLUE = ['#8FD3FF', '#3FA9F5', '#1F7FD0'], NAVYC = ['#2E5C8F', '#1D4470', '#123459'];
+
+// Appartement meublé en coupe isométrique : murs dessinés, puis meubles qui se posent un à un
+ILLU.room = (g, T) => {
+  const S = [], F = [], P = [], iso = isoF(500, 250, 44);
+  // sol + murs
+  F.push(fill(g, poly([iso(0, 0), iso(10, 0), iso(10, 10), iso(0, 10)]), '#F5EFE7', { a: T + .5, d: .7 }));
+  F.push(fill(g, poly([iso(0, 0, 0), iso(10, 0, 0), iso(10, 0, 7), iso(0, 0, 7)]), '#FFFFFF', { a: T + .6, d: .7 }));
+  F.push(fill(g, poly([iso(0, 0, 0), iso(0, 10, 0), iso(0, 10, 7), iso(0, 0, 7)]), '#EAF3FB', { a: T + .6, d: .7 }));
+  S.push(stroke(g, poly([iso(0, 10, 0), iso(0, 0, 0), iso(10, 0, 0)]).replace(' Z', ''), { a: T, d: .8, w: 3.5 }));
+  S.push(stroke(g, `M${iso(0, 10, 7).join(' ')} L${iso(0, 0, 7).join(' ')} L${iso(10, 0, 7).join(' ')}`, { a: T + .2, d: .8, w: 3.5 }));
+  S.push(stroke(g, `M${iso(0, 0, 0).join(' ')} L${iso(0, 0, 7).join(' ')} M${iso(10, 0, 0).join(' ')} L${iso(10, 0, 7).join(' ')} M${iso(0, 10, 0).join(' ')} L${iso(0, 10, 7).join(' ')}`, { a: T + .3, d: .7, w: 3.5 }));
+  S.push(stroke(g, `M${iso(10, 0, 0).join(' ')} L${iso(10, 10, 0).join(' ')} L${iso(0, 10, 0).join(' ')}`, { a: T + .4, d: .8, w: 2.5, c: 'rgba(11,36,64,.35)' }));
+  // fenêtre (mur du fond) + cadre (mur gauche)
+  F.push(fill(g, poly([iso(5.2, 0, 2.8), iso(8.8, 0, 2.8), iso(8.8, 0, 5.8), iso(5.2, 0, 5.8)]), 'url(#glassg)', { a: T + .9 }));
+  S.push(stroke(g, poly([iso(5.2, 0, 2.8), iso(8.8, 0, 2.8), iso(8.8, 0, 5.8), iso(5.2, 0, 5.8)]), { a: T + .7, d: .6, w: 2.6 }));
+  S.push(stroke(g, `M${iso(7, 0, 2.8).join(' ')} L${iso(7, 0, 5.8).join(' ')}`, { a: T + .9, d: .3, w: 2 }));
+  F.push(fill(g, poly([iso(0, 2.2, 3.4), iso(0, 4.6, 3.4), iso(0, 4.6, 5.2), iso(0, 2.2, 5.2)]), BL, { a: T + 1.0 }));
+  S.push(stroke(g, poly([iso(0, 2.2, 3.4), iso(0, 4.6, 3.4), iso(0, 4.6, 5.2), iso(0, 2.2, 5.2)]), { a: T + .8, d: .5, w: 2.4 }));
+  const piece = (at, fn) => { const grp = svgEl('g', { opacity: 0 }, g); fn(grp); P.push({ el: grp, a: at, kind: 'drop' }); };
+  // tapis
+  piece(T + 1.3, gg => svgEl('path', { d: poly([iso(3.2, 4, 0), iso(8, 4, 0), iso(8, 8.6, 0), iso(3.2, 8.6, 0)]), fill: '#DCEFFC', stroke: '#8FD3FF', 'stroke-width': 2 }, gg));
+  // lit contre le mur du fond (tête de lit + matelas + oreillers + plaid)
+  piece(T + 1.6, gg => {
+    isoBox(gg, iso, 6, 0.2, 9.8, 0.6, 0, 2.6, NAVYC);
+    isoBox(gg, iso, 6, 0.6, 9.8, 4.2, 0, 1.0, WHITE);
+    isoBox(gg, iso, 6.4, 0.8, 7.8, 1.6, 1.0, 1.35, WHITE); isoBox(gg, iso, 8.1, 0.8, 9.5, 1.6, 1.0, 1.35, WHITE);
+    isoBox(gg, iso, 6, 2.8, 9.8, 4.2, 1.0, 1.08, BLUE);
+  });
+  // canapé contre le mur gauche
+  piece(T + 2.0, gg => { isoBox(gg, iso, 0.2, 3.6, 0.9, 8.6, 0, 2.3, BLUE); isoBox(gg, iso, 0.9, 3.6, 2.4, 8.6, 0, 1.1, BLUE); isoBox(gg, iso, 0.9, 3.6, 2.4, 4.2, 1.1, 1.7, BLUE); isoBox(gg, iso, 0.9, 8.0, 2.4, 8.6, 1.1, 1.7, BLUE); });
+  // table basse
+  piece(T + 2.3, gg => { isoBox(gg, iso, 4.2, 5.4, 6.6, 7.4, 0.75, 0.95, WOOD); isoBox(gg, iso, 4.4, 7.1, 4.6, 7.3, 0, .75, WOOD); isoBox(gg, iso, 6.3, 7.1, 6.5, 7.3, 0, .75, WOOD); });
+  // meuble TV / bureau + écran
+  piece(T + 2.6, gg => { isoBox(gg, iso, 9.0, 5.0, 9.8, 9.0, 0, 1.4, WOOD); isoBox(gg, iso, 9.35, 6.0, 9.55, 8.0, 1.4, 3.0, [INK, INK, '#243F5E']); });
+  // plante
+  piece(T + 2.9, gg => { isoBox(gg, iso, 0.5, 9.0, 1.3, 9.8, 0, 0.9, ['#F4F4F4', '#E2E2E2', '#CFCFCF']); const p = iso(0.9, 9.4, 1.9); svgEl('circle', { cx: p[0], cy: p[1], r: 30, fill: '#7FC08F' }, gg); svgEl('circle', { cx: p[0] - 14, cy: p[1] + 10, r: 18, fill: '#97D2A6' }, gg); svgEl('circle', { cx: p[0] + 14, cy: p[1] - 14, r: 16, fill: '#A9DBB4' }, gg); });
+  // suspension lumineuse
+  piece(T + 3.2, gg => { const a = iso(5.4, 6.4, 7), b = iso(5.4, 6.4, 4.4); svgEl('path', { d: `M${a.join(' ')} L${b.join(' ')}`, stroke: INK, 'stroke-width': 2 }, gg); svgEl('path', { d: `M${b[0] - 26} ${b[1] + 26} L${b[0] + 26} ${b[1] + 26} L${b[0] + 12} ${b[1]} L${b[0] - 12} ${b[1]} Z`, fill: '#FFD27A', stroke: INK, 'stroke-width': 2 }, gg); svgEl('ellipse', { cx: b[0], cy: b[1] + 120, rx: 120, ry: 50, fill: 'rgba(255,210,122,.18)' }, gg); });
+  return { S, F, P };
+};
+
+// mini-vignette d'appartement (pour les cartes du site)
+function aptThumb(i) {
+  const hues = [['#DFF2FF', '#8FD3FF'], ['#E8F5EC', '#9ED8B0'], ['#FFF3E0', '#FFCF8A']][i % 3];
+  return `<svg viewBox="0 0 200 130" preserveAspectRatio="xMidYMid slice"><rect width="200" height="130" fill="${hues[0]}"/>
+   <path d="M20 112 H180" stroke="#0B2440" stroke-width="3"/><rect x="${30 + i * 6}" y="76" width="70" height="26" rx="6" fill="${hues[1]}" stroke="#0B2440" stroke-width="2.5"/>
+   <rect x="${26 + i * 6}" y="64" width="14" height="38" rx="5" fill="${hues[1]}" stroke="#0B2440" stroke-width="2.5"/>
+   <rect x="118" y="34" width="50" height="38" fill="#fff" stroke="#0B2440" stroke-width="2.5"/><path d="M143 34 V72" stroke="#0B2440" stroke-width="2"/>
+   <path d="M120 112 V90 H160 V112" fill="none" stroke="#0B2440" stroke-width="2.5"/><circle cx="${175 - i * 4}" cy="94" r="10" fill="#7FC08F"/></svg>`;
+}
+
+/* Scène : parcours de réservation sur téléphone (site -> choix -> WhatsApp) */
+SCENES.booking = {
+  build(s, root) {
+    root.style.background = bgOf(s);
+    s._deco = buildDeco(root, s.deco || 'blueprint', s);
+    (s.texts || []).forEach(x => buildText(root, x));
+    s._steps = (s.steps || []).map((st, i) => { const d = el('div', 'bstep', root, `<span class="bn">${i + 1}</span><span>${st.t}</span>`); Object.assign(d.style, st.pos[FMT]); return { d, at: st.at, until: st.until }; });
+    const ph = el('div', 'phone', root); Object.assign(ph.style, s.phone[FMT]); s._ph = ph;
+    const apts = s.apts.map((a, i) => `<div class="apt" data-i="${i}"><div class="th">${aptThumb(i)}</div><div class="ai"><div class="an">${a}</div><div class="ac">Meublé</div></div><div class="ak">${ICONS.check}</div></div>`).join('');
+    ph.innerHTML = `<div class="scr bk">
+      <div class="pg p0"><div class="sbar"><b>LUMO</b> IMMOBILIER</div><div class="shero">${window.heroArt ? window.heroArt() : ''}</div>
+        <div class="stit">Appartements meublés<br>à Lomé</div><div class="sbtn rsv">RÉSERVER</div></div>
+      <div class="pg p1"><div class="sbar"><b>LUMO</b> IMMOBILIER</div><div class="stit2">Choisissez votre appartement</div>${apts}</div>
+      <div class="pg p2"><div class="sbar"><b>LUMO</b> IMMOBILIER</div><div class="dth">${aptThumb(s.pick)}</div><div class="stit2">${s.apts[s.pick]}</div><div class="ac big">Meublé</div>
+        <div class="sbtn wa">${ICONS.wa}<span>RÉSERVER SUR WHATSAPP</span></div></div>
+      <div class="pg p3"><div class="hdr"><div class="av">L</div><div><div class="nm">LUMO IMMOBILIER</div><div class="st">WhatsApp</div></div></div><div class="msgs"></div></div></div>`;
+    s._pg = [0, 1, 2, 3].map(i => ph.querySelector('.p' + i));
+    const msgs = ph.querySelector('.msgs');
+    s._msgs = s.msgs.map(m => { const typing = m.me ? null : el('div', 'bub in typing', msgs, '<i></i><i></i><i></i>'); const b = el('div', 'bub ' + (m.me ? 'out' : 'in'), msgs, `${m.t}<span class="tm">${m.tm || ''}</span>`); return { b, typing, at: m.at, me: m.me }; });
+    s._rsv = ph.querySelector('.rsv'); s._wa = ph.querySelector('.sbtn.wa'); s._apt = [...ph.querySelectorAll('.apt')];
+    s._tap = el('div', 'tap', ph);
+  },
+  update(s, t) {
+    updateDeco(s._deco, t, s);
+    (s.texts || []).forEach(x => updateText(x, t));
+    s._steps.forEach(k => { const q = E.outExpo(pr(t, k.at, k.at + .7)); const on = t < (k.until ?? 1e9); k.d.style.opacity = q * (on ? 1 : .45); k.d.style.transform = `translateX(${(1 - q) * -40}px) scale(${on ? 1 : .94})`; k.d.classList.toggle('on', on && t >= k.at); });
+    const q = E.outExpo(pr(t, s.phoneAt, s.phoneAt + 1.1));
+    s._ph.style.opacity = q; s._ph.style.transform = `perspective(2000px) translateY(${(1 - q) * 200}px) rotateX(${(1 - q) * 25}deg)`;
+    // pages : glissement horizontal
+    const cuts = s.pages; // instants de passage vers les pages 1, 2, 3
+    s._pg.forEach((p, i) => {
+      const enter = i === 0 ? 1 : E.inOutCubic(pr(t, cuts[i - 1], cuts[i - 1] + .5));
+      const leave = i < 3 ? E.inOutCubic(pr(t, cuts[i], cuts[i] + .5)) : 0;
+      p.style.transform = `translateX(${(1 - enter) * 100 - leave * 30}%)`; p.style.zIndex = i; p.style.filter = `brightness(${1 - leave * .3})`;
+    });
+    // pulsation du bouton Réserver, sélection, bouton WhatsApp
+    s._rsv.style.transform = `scale(${1 + .04 * Math.sin(t * 6) * (t < s.taps[0] ? 1 : 0) - .06 * Math.sin(Math.PI * pr(t, s.taps[0], s.taps[0] + .3))})`;
+    s._apt.forEach((a, i) => { const on = i === s.pick && t > s.taps[1]; a.classList.toggle('sel', on); a.style.transform = `scale(${i === s.pick ? 1 - .05 * Math.sin(Math.PI * pr(t, s.taps[1], s.taps[1] + .3)) : 1})`; const ap = E.outExpo(pr(t, cuts[0] + .2 + i * .15, cuts[0] + .9 + i * .15)); a.style.opacity = ap; a.style.marginLeft = (1 - ap) * 60 + 'px'; });
+    s._wa.style.transform = `scale(${1 + .04 * Math.sin(t * 6) * (t > cuts[1] + .5 && t < s.taps[2] ? 1 : 0) - .06 * Math.sin(Math.PI * pr(t, s.taps[2], s.taps[2] + .3))})`;
+    // indicateur de geste
+    const targets = [s._rsv, s._apt[s.pick], s._wa]; let tp = -1, tgt = null;
+    s.taps.forEach((tt, i) => { if (t > tt - .5 && t < tt + .5) { tp = (t - tt + .5); tgt = targets[i]; } });
+    if (tgt) { const r = tgt.getBoundingClientRect(), pr0 = s._ph.getBoundingClientRect(), sc = pr0.width / s._ph.offsetWidth; s._tap.style.left = ((r.left - pr0.left) / sc + r.width / sc * .7) + 'px'; s._tap.style.top = ((r.top - pr0.top) / sc + r.height / sc * .5) + 'px'; s._tap.style.opacity = Math.sin(Math.PI * tp); s._tap.style.transform = `translate(-50%,-50%) scale(${1.3 - tp * .5})`; }
+    else s._tap.style.opacity = 0;
+    s._msgs.forEach(m => {
+      if (m.typing) { const on = t > m.at - 1.1 && t < m.at; m.typing.style.display = on ? 'inline-flex' : 'none'; m.typing.querySelectorAll('i').forEach((d, i) => { d.style.transform = `translateY(${Math.sin(t * 9 - i) * 4}px)`; }); }
+      const k = E.outBack(pr(t, m.at, m.at + .5)); m.b.style.display = t >= m.at ? 'block' : 'none'; m.b.style.transform = `scale(${k})`; m.b.style.transformOrigin = m.me ? '100% 100%' : '0 100%';
+    });
+  },
+};
+
+/* Scène : appel à l'action final « Réserver » */
+SCENES.bigcta = {
+  build(s, root) {
+    root.style.background = bgOf(s);
+    s._deco = buildDeco(root, s.deco || 'rings', s);
+    (s.texts || []).forEach(x => buildText(root, x));
+    s._btn = el('div', 'bigbtn', root, `<span>RÉSERVER</span><span class="arr">→</span>`); Object.assign(s._btn.style, s.btn[FMT]);
+    s._sub = el('div', 'bigsub', root, s.sub); Object.assign(s._sub.style, s.subPos[FMT]);
+    s._url = el('div', 'bigurl', root, `${ICONS.lock}<span>${CFG.site}</span>`); Object.assign(s._url.style, s.urlPos[FMT]);
+    s._tap = el('div', 'tap big', root);
+  },
+  update(s, t) {
+    updateDeco(s._deco, t, s);
+    (s.texts || []).forEach(x => updateText(x, t));
+    const b = E.outBack(pr(t, s.btnAt, s.btnAt + .7)); const pulse = t > s.btnAt + .7 ? .035 * Math.sin((t - s.btnAt) * 5) : 0;
+    s._btn.style.opacity = clamp(b * 2); s._btn.style.transform = `translateX(-50%) scale(${b + pulse})`;
+    const ring = ((t - s.btnAt) % 1.4) / 1.4; s._btn.style.boxShadow = `0 0 0 ${ring * 34 * (t > s.btnAt + .7 ? 1 : 0)}px rgba(63,169,245,${(1 - ring) * .4}), 0 30px 60px rgba(31,127,208,.35)`;
+    const u = E.outExpo(pr(t, s.btnAt + .6, s.btnAt + 1.5)); s._sub.style.opacity = u; s._sub.style.transform = `translateY(${(1 - u) * 30}px)`;
+    const w = E.outExpo(pr(t, s.btnAt + 1.0, s.btnAt + 1.9)); s._url.style.opacity = w; s._url.style.transform = `translateX(-50%) translateY(${(1 - w) * 30}px)`;
+    const tp = pr(t, s.btnAt + 1.6, s.btnAt + 2.3); const r = s._btn.getBoundingClientRect();
+    s._tap.style.left = (r.left + r.width * .72) + 'px'; s._tap.style.top = (r.top + r.height * .55) + 'px'; s._tap.style.opacity = tp > 0 && tp < 1 ? Math.sin(Math.PI * tp) : 0; s._tap.style.transform = `translate(-50%,-50%) scale(${1.4 - tp * .6})`;
+  },
+};
