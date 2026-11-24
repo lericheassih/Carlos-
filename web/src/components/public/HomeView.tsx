@@ -9,7 +9,7 @@ import { todayIso } from "@/lib/dates";
 import { countryName } from "@/lib/format";
 
 export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartments: PublicApartment[]; reviews: PublicReview[] }) {
-  const featured = [...apartments.filter((a) => a.featured), ...apartments.filter((a) => !a.featured)].slice(0, 6);
+  const featured = [...apartments.filter((a) => a.featured), ...apartments.filter((a) => !a.featured)];
   const today = todayIso();
   return (
     <>
@@ -44,10 +44,10 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="text-[22px] font-semibold sm:text-[26px]">Logements populaires à Lomé</h2>
-            <p className="mt-1 text-slate-500">Choisis par nos voyageurs</p>
+            <h2 className="text-[22px] font-semibold sm:text-[26px]">Nos logements à Lomé</h2>
+            <p className="mt-1 text-slate-500">Tous nos appartements meublés, prêts à réserver.</p>
           </div>
-          {apartments.length > 0 && <Link href="/appartements" className="inline-flex items-center gap-1 font-semibold text-[var(--site-primary)] hover:underline">Voir tous les logements <ArrowRight className="size-4" /></Link>}
+          {apartments.length > 0 && <Link href="/appartements" className="inline-flex items-center gap-1 font-semibold text-[var(--site-primary)] hover:underline">Rechercher par dates et quartier <ArrowRight className="size-4" /></Link>}
         </div>
         {featured.length === 0 ? (
           <p className="mt-8 rounded-2xl border border-dashed border-slate-300 p-10 text-center text-slate-600">Nos appartements seront bientôt en ligne. Contactez-nous sur WhatsApp en attendant.</p>
