@@ -202,7 +202,8 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
         </a>
       )}
 
-      {!form ? (
+      {/* Demande en ligne : seulement si aucun numéro WhatsApp n'est configuré (la réservation passe par WhatsApp) */}
+      {!whatsapp && (!form ? (
         <button type="button" disabled={!valid} onClick={() => setForm(true)} className="w-full rounded-lg border border-slate-900 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 disabled:opacity-40">
           Envoyer une demande de réservation
         </button>
@@ -222,7 +223,7 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
           </button>
           <p className="text-[11px] text-slate-500">Vos coordonnées servent uniquement à traiter votre réservation.</p>
         </form>
-      )}
+      ))}
       <p className="text-center text-sm text-slate-500">Confirmation sur WhatsApp · aucun montant débité pour le moment</p>
     </div>
   );
