@@ -13,4 +13,4 @@ Ce dossier en garde une copie pour le transférer vers le projet Supabase en lig
 4. Créer le compte administrateur : `npm run create-admin`.
 
 ## Mettre à jour la sauvegarde
-Avec la base locale démarrée : `python3 scripts/sauvegarder-contenu.py`, puis recopier les photos (voir le script).
+Avec la base locale démarrée, depuis `web/` : `python3 scripts/sauvegarder-contenu.py` (données et photos).

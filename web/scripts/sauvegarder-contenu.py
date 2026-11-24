@@ -22,3 +22,9 @@ open("supabase/sauvegarde/donnees.sql", "w").write("-- Sauvegarde du contenu LUM
 paths = q("select m.storage_path from media m where not exists (select 1 from apartment_media am join apartments a on a.id=am.apartment_id where am.media_id=m.id and a.slug like 'appartement-test-%')")
 print(len(paths), "médias ;", sql.count("INSERT INTO public.apartments "), "logements ;", "created_by restant:", len(re.findall(r"INSERT INTO public.media .*'[0-9a-f-]{36}', '\d{4}", sql)))
 json.dump(paths, open("/tmp/claude-0/paths.json", "w"))
+# Copie des fichiers photo depuis le stockage local
+import urllib.request
+for s in paths:
+    os.makedirs("supabase/sauvegarde/media/" + os.path.dirname(s), exist_ok=True)
+    urllib.request.urlretrieve("http://127.0.0.1:54321/storage/v1/object/public/media/" + s, "supabase/sauvegarde/media/" + s)
+print("photos copiées dans supabase/sauvegarde/media/")
