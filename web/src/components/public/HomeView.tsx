@@ -15,6 +15,15 @@ export function HomeView({ s, apartments, reviews }: { s: SiteSettings; apartmen
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-[#222222]">
+        {/* Vidéo d'ambiance en lecture automatique (muette, en boucle) ; image fixe si l'animation est réduite */}
+        <video autoPlay muted loop playsInline preload="auto" poster="/videos/accueil.jpg" aria-hidden="true"
+          className="absolute inset-0 -z-10 size-full object-cover motion-reduce:hidden">
+          <source src="/videos/accueil.webm" type="video/webm" />
+          <source src="/videos/accueil.mp4" type="video/mp4" />
+        </video>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/videos/accueil.jpg" alt="" aria-hidden="true" className="absolute inset-0 -z-10 hidden size-full object-cover motion-reduce:block" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/55 via-black/40 to-black/65" />
         <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pb-12 pt-14 sm:px-6 sm:pb-16 sm:pt-24">
           <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.08] text-white sm:text-6xl">{s.hero_title}</h1>
           {s.hero_subtitle && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/80">{s.hero_subtitle}</p>}
