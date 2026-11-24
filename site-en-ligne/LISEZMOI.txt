@@ -1,0 +1,27 @@
+SITE LUMO IMMOBILIER — VERSION EN LIGNE (sans administration)
+
+Ce dossier est le site complet, prêt à héberger : pages HTML, photos, vidéo d'accueil.
+Aucun serveur ni base de données n'est nécessaire.
+
+ÇA FONCTIONNE
+- Accueil (vidéo), catalogue avec filtres (dates, voyageurs, quartier), fiches, visite photo, zoom.
+- Calendrier et prix total (nuit, semaine, 2 et 3 semaines, mois).
+- Bouton « Réserver » : ouvre WhatsApp avec le message déjà rédigé.
+- Pixel Meta (après accord du visiteur dans le bandeau cookies), dès qu'il est ajouté.
+
+LIMITES DE CETTE VERSION
+- Pas d'administration : pour changer un logement, un prix ou une photo, le site est regénéré puis republié.
+- Les disponibilités du calendrier sont celles du jour de génération.
+
+METTRE EN LIGNE (gratuit) — au choix
+1) Cloudflare Pages, par glisser-déposer
+   dash.cloudflare.com > Workers & Pages > Créer > Pages > « Charger des ressources » (Upload assets)
+   > nommez le projet (ex. lumo-immobilier) > déposez le CONTENU de ce dossier > Déployer.
+   Adresse obtenue : https://lumo-immobilier.pages.dev (nom de domaine personnalisé possible ensuite).
+2) Cloudflare Pages, relié à GitHub (mises à jour automatiques)
+   Créer > Pages > « Se connecter à Git » > dépôt lericheassih/Carlos- > branche du site
+   > Commande de build : (vide) > Répertoire de sortie : site-en-ligne > Enregistrer et déployer.
+3) Netlify : app.netlify.com/drop > déposez ce dossier.
+
+REGÉNÉRER (depuis web/, application et base locales démarrées)
+   PIXEL_ID=<identifiant> SITE_URL=https://<adresse> node scripts/site-statique/generer.mjs ../site-en-ligne

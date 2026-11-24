@@ -19,8 +19,10 @@ export default async function Privacy() {
           <li>Le pays et la ville approximatifs déduits par notre hébergeur au moment de la visite. <strong>Votre adresse IP n&apos;est pas enregistrée.</strong></li>
           <li>Les clics sur les boutons WhatsApp et téléphone.</li>
         </ul>
-        <h2 className="pt-2 text-xl font-semibold text-slate-900">Demandes de réservation</h2>
-        <p>Les coordonnées saisies dans le formulaire (nom, téléphone, e-mail) servent uniquement au traitement de votre réservation et ne sont jamais revendues.</p>
+        <h2 className="pt-2 text-xl font-semibold text-slate-900">Publicité Meta (Facebook, Instagram)</h2>
+        <p>Si vous l&apos;acceptez, nous utilisons le pixel Meta. Il indique à Meta les pages et logements consultés, les recherches, et les clics sur « Réserver sur WhatsApp » ou sur notre numéro, afin de mesurer l&apos;efficacité de nos publicités et de les montrer aux personnes intéressées. Meta peut associer ces informations à votre compte Facebook ou Instagram, selon ses propres règles de confidentialité. Sans votre accord, le pixel n&apos;est pas chargé.</p>
+        <h2 className="pt-2 text-xl font-semibold text-slate-900">Réservations</h2>
+        <p>Les réservations se font sur WhatsApp ou par téléphone : nous ne recevons que les informations que vous nous envoyez (nom, dates, nombre de personnes). Elles servent uniquement au traitement de votre réservation et ne sont jamais revendues.</p>
         <h2 className="pt-2 text-xl font-semibold text-slate-900">Vos choix</h2>
         <ConsentControls />
         <p>Pour toute demande d&apos;accès ou de suppression de vos données, contactez-nous{s.email ? ` à ${s.email}` : ""}{s.phone ? ` ou au ${s.phone}` : ""}.</p>
