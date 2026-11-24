@@ -24,4 +24,4 @@ METTRE EN LIGNE (gratuit) — au choix
 3) Netlify : app.netlify.com/drop > déposez ce dossier.
 
 REGÉNÉRER (depuis web/, application et base locales démarrées)
-   PIXEL_ID=<identifiant> SITE_URL=https://<adresse> node scripts/site-statique/generer.mjs ../site-en-ligne
+   PIXEL_ID=1188163112670746 SITE_URL=https://<adresse> node scripts/site-statique/generer.mjs ../site-en-ligne
