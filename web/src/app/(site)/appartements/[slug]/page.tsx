@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getApartment, getReviews, getSettings } from "@/lib/public-data";
+import { getApartment, getOtherApartments, getReviews, getSettings } from "@/lib/public-data";
 import { ApartmentView } from "@/components/public/ApartmentView";
 import { fcfa } from "@/lib/format";
 
@@ -23,8 +23,11 @@ export default async function ApartmentPage({ params, searchParams }: { params: 
   const { slug } = await params;
   const [a, s] = await Promise.all([getApartment(slug), getSettings()]);
   if (!a) notFound();
-  const reviews = await getReviews(a.id);
   const sp = await searchParams;
+  const [reviews, others] = await Promise.all([
+    getReviews(a.id),
+    getOtherApartments(a, { checkIn: sp.arrivee, checkOut: sp.depart, guests: Number(sp.voyageurs) || undefined }).catch(() => ({ list: [], datesFiltered: false })),
+  ]);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Apartment",
@@ -40,7 +43,7 @@ export default async function ApartmentPage({ params, searchParams }: { params: 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <ApartmentView a={a} s={s} reviews={reviews} initial={sp} />
+      <ApartmentView a={a} s={s} reviews={reviews} initial={sp} others={others} />
     </>
   );
 }

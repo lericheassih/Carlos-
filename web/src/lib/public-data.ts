@@ -38,3 +38,23 @@ export async function getAvailableIds(checkIn: string, checkOut: string): Promis
   const { data } = await createPublicClient().rpc("available_apartment_ids", { p_in: checkIn, p_out: checkOut });
   return new Set(((data ?? []) as string[]).map(String));
 }
+
+/** Autres logements à proposer sous une fiche : même quartier, capacité suffisante et prix proche d'abord.
+ *  Si des dates sont choisies, seuls les logements libres à ces dates sont gardés. */
+export async function getOtherApartments(current: { id: string; neighborhood: string | null; max_guests: number; pricing: { night: number } },
+  opts: { checkIn?: string; checkOut?: string; guests?: number } = {}, limit = 8): Promise<{ list: PublicApartment[]; datesFiltered: boolean }> {
+  let list = (await getApartments()).filter((x) => x.id !== current.id);
+  const datesFiltered = Boolean(opts.checkIn && opts.checkOut && opts.checkIn < opts.checkOut);
+  if (datesFiltered) {
+    const ok = await getAvailableIds(opts.checkIn!, opts.checkOut!);
+    list = list.filter((x) => ok.has(x.id));
+  }
+  const want = opts.guests && opts.guests > 0 ? opts.guests : current.max_guests;
+  const ref = current.pricing.night || 1;
+  const score = (x: PublicApartment) =>
+    (x.neighborhood && x.neighborhood === current.neighborhood ? 3 : 0) +
+    (x.max_guests >= want ? 2 : 0) +
+    (x.featured ? 0.5 : 0) -
+    Math.min(2, Math.abs((x.pricing.night || 0) - ref) / ref);
+  return { list: list.map((x) => ({ x, s: score(x) })).sort((p, q) => q.s - p.s).slice(0, limit).map((o) => o.x), datesFiltered };
+}

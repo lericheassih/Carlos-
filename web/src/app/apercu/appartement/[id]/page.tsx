@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { buildSnapshot } from "@/lib/snapshot";
 import { normalizeSettings } from "@/lib/site-settings";
 import { ApartmentView } from "@/components/public/ApartmentView";
+import { getOtherApartments } from "@/lib/public-data";
 import { SiteFooter, SiteHeader } from "@/components/public/SiteChrome";
 import { PreviewBanner } from "@/components/public/PreviewBanner";
 import { siteStyle } from "@/components/public/theme";
@@ -14,11 +15,12 @@ export default async function PreviewApartment({ params }: { params: Promise<{ i
   if (!built) notFound();
   const { data: ws } = await supabase.from("website_settings").select("published").eq("id", 1).maybeSingle();
   const s = normalizeSettings(ws?.published);
+  const others = await getOtherApartments(built.snapshot).catch(() => ({ list: [], datesFiltered: false }));
   return (
     <div style={siteStyle(s)} className="site min-h-dvh bg-white text-slate-900">
       <PreviewBanner back={`/admin/appartements/${id}`} text="version enregistrée, pas encore forcément publiée. Les visiteurs ne voient pas cette page." />
       <SiteHeader s={s} />
-      <ApartmentView a={built.snapshot} s={s} reviews={[]} preview />
+      <ApartmentView a={built.snapshot} s={s} reviews={[]} preview others={others} />
       <SiteFooter s={s} />
     </div>
   );

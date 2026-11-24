@@ -12,11 +12,14 @@ import { BookingWidget } from "./BookingWidget";
 import { TrackOnView } from "./Tracker";
 import { PhoneLink } from "./ContactLinks";
 import { AmenitiesBlock, GoodToKnow, PhotoGallery } from "./StayDetails";
+import { OtherApartments } from "./OtherApartments";
+import type { PublicApartment } from "@/lib/public-data";
 
 const plural = (n: number, s: string, p = s + "s") => `${n} ${n > 1 ? p : s}`;
 
-export function ApartmentView({ a, s, reviews, preview, initial }: {
+export function ApartmentView({ a, s, reviews, preview, initial, others }: {
   a: ApartmentSnapshot; s: SiteSettings; reviews: PublicReview[]; preview?: boolean; initial?: { arrivee?: string; depart?: string; voyageurs?: string };
+  others?: { list: PublicApartment[]; datesFiltered: boolean };
 }) {
   const today = todayIso();
   const price = displayNightPrice(a.pricing, today);
@@ -175,6 +178,11 @@ export function ApartmentView({ a, s, reviews, preview, initial }: {
           </div>
         </aside>
       </div>
+
+      {others && <OtherApartments list={others.list} datesFiltered={others.datesFiltered} query={(() => {
+        const q = new URLSearchParams(Object.entries(initial ?? {}).filter(([, v]) => v) as [string, string][]).toString();
+        return q ? `?${q}` : "";
+      })()} />}
 
       <MobileBookBar aptId={a.id} nightPrice={price.price} minNights={a.pricing.min_nights} />
     </div>
