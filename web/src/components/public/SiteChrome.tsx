@@ -1,0 +1,100 @@
+import Link from "next/link";
+import { Mail, MapPin, Phone, Search } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TikTokIcon } from "./SocialIcons";
+import type { SiteSettings } from "@/lib/site-settings";
+import { initials } from "@/lib/format";
+import { WhatsAppLink, PhoneLink } from "./ContactLinks";
+import { WhatsAppIcon } from "./WhatsAppIcon";
+
+export function Logo({ s, only, className = "" }: { s: SiteSettings; only?: boolean; className?: string }) {
+  return (
+    <Link href="/" aria-label={only ? `${s.company_name} — accueil` : undefined} className={`flex min-w-0 items-center gap-2.5 ${className}`}>
+      {s.logo_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={s.logo_url} alt={s.company_name} className={`${only ? "h-14 max-w-[180px]" : "h-10 max-w-[140px]"} w-auto rounded-lg object-contain`} />
+      ) : (
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[var(--site-primary)] text-sm font-bold text-white">{initials(s.company_name)}</span>
+      )}
+      {!only && <span className="min-w-0 leading-tight">
+        <span className="block truncate text-[19px] font-bold tracking-tight text-[var(--site-primary)]">{s.company_name}</span>
+        {s.tagline && <span className="block truncate text-[11px] uppercase tracking-[0.14em] text-slate-500">{s.tagline}</span>}
+      </span>}
+    </Link>
+  );
+}
+
+export function SiteHeader({ s }: { s: SiteSettings }) {
+  return (
+    <header className="sticky top-0 z-30 border-b border-[#ebebeb] bg-white">
+      {/* Mobile : uniquement le logo, centré */}
+      <div className="flex h-20 items-center justify-center px-4 md:hidden">
+        <Logo s={s} only />
+      </div>
+      <div className="mx-auto hidden h-20 max-w-6xl items-center gap-4 px-4 sm:px-6 md:flex">
+        <Logo s={s} only />
+        <Link href="/appartements" className="shadow-search mx-auto hidden items-center rounded-full border border-slate-200 py-2 pl-6 pr-2 text-sm md:flex">
+          <span className="font-semibold">Quartier</span>
+          <span className="mx-4 h-6 w-px bg-slate-200" />
+          <span className="font-semibold">Dates</span>
+          <span className="mx-4 h-6 w-px bg-slate-200" />
+          <span className="text-slate-500">Ajouter des voyageurs</span>
+          <span className="btn-brand ml-4 grid size-8 place-items-center rounded-full"><Search className="size-4" strokeWidth={3} /></span>
+        </Link>
+        <div className="ml-auto flex items-center gap-1 md:ml-0">
+          <Link href="/#contact" className="hidden rounded-full px-4 py-2.5 text-sm font-semibold hover:bg-slate-100 lg:block">Nous contacter</Link>
+          <WhatsAppLink number={s.whatsapp} message={`Bonjour ${s.company_name}, j'aimerais des informations sur vos appartements.`} placement="header"
+            className="hidden items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold hover:shadow-md sm:flex">
+            <WhatsAppIcon className="size-4 text-[#25D366]" /> WhatsApp
+          </WhatsAppLink>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function SiteFooter({ s }: { s: SiteSettings }) {
+  const year = new Date().getFullYear();
+  return (
+    <footer className="mt-20 border-t border-slate-200 bg-slate-50">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+        <div className="lg:col-span-2">
+          <Logo s={s} />
+          {s.about_text && <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-600">{s.about_text}</p>}
+          <div className="mt-4 flex gap-2">
+            {s.social.facebook && <a href={s.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-9 place-items-center rounded-full bg-white text-slate-600 ring-1 ring-slate-200 hover:text-slate-900"><FacebookIcon /></a>}
+            {s.social.instagram && <a href={s.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-9 place-items-center rounded-full bg-white text-slate-600 ring-1 ring-slate-200 hover:text-slate-900"><InstagramIcon /></a>}
+            {s.social.tiktok && <a href={s.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="grid size-9 place-items-center rounded-full bg-white text-xs font-bold text-slate-600 ring-1 ring-slate-200 hover:text-slate-900"><TikTokIcon /></a>}
+          </div>
+        </div>
+        <div>
+          <h3 className="text-sm font-semibold text-slate-900">Navigation</h3>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600">
+            <li><Link href="/appartements" className="hover:text-slate-900">Nos appartements</Link></li>
+            <li><Link href="/conditions" className="hover:text-slate-900">Conditions de réservation</Link></li>
+            <li><Link href="/confidentialite" className="hover:text-slate-900">Confidentialité</Link></li>
+          </ul>
+        </div>
+        <div>
+          <h3 className="text-sm font-semibold text-slate-900">Contact</h3>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600">
+            {s.phone && <li><PhoneLink phone={s.phone} placement="footer" className="flex items-center gap-2 hover:text-slate-900"><Phone className="size-4" /> {s.phone}</PhoneLink></li>}
+            {s.whatsapp && <li><WhatsAppLink number={s.whatsapp} message={`Bonjour ${s.company_name} !`} placement="footer" className="flex items-center gap-2 hover:text-slate-900"><WhatsAppIcon className="size-4" /> WhatsApp</WhatsAppLink></li>}
+            {s.email && <li><a href={`mailto:${s.email}`} className="flex items-center gap-2 hover:text-slate-900"><Mail className="size-4" /> {s.email}</a></li>}
+            {s.address && <li className="flex items-center gap-2"><MapPin className="size-4" /> {s.address}</li>}
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-slate-200 py-5 text-center text-xs text-slate-500">© {year} {s.company_name}</div>
+    </footer>
+  );
+}
+
+export function WhatsAppFab({ s }: { s: SiteSettings }) {
+  return (
+    <WhatsAppLink number={s.whatsapp} message={`Bonjour ${s.company_name}, j'aimerais réserver un appartement.`} placement="floating"
+      id="wa-fab" className="fixed bottom-5 right-4 z-30 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/20 transition hover:scale-105 sm:right-6">
+      <span className="sr-only">Nous écrire sur WhatsApp</span>
+      <WhatsAppIcon className="size-7" />
+    </WhatsAppLink>
+  );
+}

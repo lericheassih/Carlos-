@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="fonts/local.css">
+<style>
+  :root { --brand: #FF385C; --brand2: #D70466; --ink: #222222; --muted: #6A6A6A; --cream: #F6F1EA; --gold: #C9A86A; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: var(--W); height: var(--H); overflow: hidden; background: #000; }
+  body { font-family: "Figtree", sans-serif; color: #fff; -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+  #stage { position: relative; width: var(--W); height: var(--H); overflow: hidden; background: #000; }
+  .scene { position: absolute; inset: 0; overflow: hidden; display: none; }
+  .ph { position: absolute; inset: 0; overflow: hidden; }
+  .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 50%; will-change: transform; }
+  .fx { position: absolute; inset: 0; pointer-events: none; }
+  .vignette { background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,.85) 100%); }
+  .grain { width: 100%; height: 100%; mix-blend-mode: overlay; image-rendering: pixelated; }
+  .leak { position: absolute; inset: 0; mix-blend-mode: screen; pointer-events: none; }
+  .w { display: inline-block; }
+  .c { display: inline-block; }
+  .mask { overflow: hidden; display: inline-block; vertical-align: bottom; padding-bottom: .08em; }
+  .caps { position: absolute; left: 50%; transform: translateX(-50%); max-width: 920px; width: max-content; text-align: center;
+          font: 600 44px/1.25 "Figtree", sans-serif; padding: 14px 26px; border-radius: 16px; letter-spacing: -0.005em; }
+  .caps-dark { background: rgba(10,10,10,.62); color: #fff; backdrop-filter: blur(8px); }
+  .caps-light { background: rgba(255,255,255,.92); color: #222; box-shadow: 0 6px 24px rgba(0,0,0,.12); }
+  .caps-gold { background: rgba(8,8,10,.7); color: #F3E7CF; border: 1px solid rgba(201,168,106,.55); font-family: "Inter", sans-serif; font-weight: 400; font-size: 40px; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="moteur.js"></script>
+<script>(() => { const c = new URLSearchParams(location.search).get("c"); if (/^c[56]$/.test(c)) document.write('<script src="ui/positions.js"><\/script><script src="concepts/tuto.js"><\/script>'); document.write('<script src="concepts/' + c + '.js"><\/script>'); })()</script>
+</body>
+</html>
