@@ -5,21 +5,20 @@ import type { SiteSettings } from "@/lib/site-settings";
 import { initials } from "@/lib/format";
 import { WhatsAppLink, PhoneLink } from "./ContactLinks";
 import { WhatsAppIcon } from "./WhatsAppIcon";
-import { MobileNav } from "./MobileNav";
 
-export function Logo({ s }: { s: SiteSettings }) {
+export function Logo({ s, only, className = "" }: { s: SiteSettings; only?: boolean; className?: string }) {
   return (
-    <Link href="/" className="flex min-w-0 items-center gap-2.5">
+    <Link href="/" aria-label={only ? `${s.company_name} — accueil` : undefined} className={`flex min-w-0 items-center gap-2.5 ${className}`}>
       {s.logo_url ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={s.logo_url} alt={s.company_name} className="h-10 w-auto max-w-[140px] rounded-lg object-contain" />
+        <img src={s.logo_url} alt={s.company_name} className={`${only ? "h-14 max-w-[180px]" : "h-10 max-w-[140px]"} w-auto rounded-lg object-contain`} />
       ) : (
         <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[var(--site-primary)] text-sm font-bold text-white">{initials(s.company_name)}</span>
       )}
-      <span className="min-w-0 leading-tight">
+      {!only && <span className="min-w-0 leading-tight">
         <span className="block truncate text-[19px] font-bold tracking-tight text-[var(--site-primary)]">{s.company_name}</span>
         {s.tagline && <span className="block truncate text-[11px] uppercase tracking-[0.14em] text-slate-500">{s.tagline}</span>}
-      </span>
+      </span>}
     </Link>
   );
 }
@@ -27,8 +26,12 @@ export function Logo({ s }: { s: SiteSettings }) {
 export function SiteHeader({ s }: { s: SiteSettings }) {
   return (
     <header className="sticky top-0 z-30 border-b border-[#ebebeb] bg-white">
-      <div className="mx-auto flex h-20 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Logo s={s} />
+      {/* Mobile : uniquement le logo, centré */}
+      <div className="flex h-20 items-center justify-center px-4 md:hidden">
+        <Logo s={s} only />
+      </div>
+      <div className="mx-auto hidden h-20 max-w-6xl items-center gap-4 px-4 sm:px-6 md:flex">
+        <Logo s={s} only />
         <Link href="/appartements" className="shadow-search mx-auto hidden items-center rounded-full border border-slate-200 py-2 pl-6 pr-2 text-sm md:flex">
           <span className="font-semibold">Quartier</span>
           <span className="mx-4 h-6 w-px bg-slate-200" />
@@ -44,7 +47,6 @@ export function SiteHeader({ s }: { s: SiteSettings }) {
             <WhatsAppIcon className="size-4 text-[#25D366]" /> WhatsApp
           </WhatsAppLink>
         </div>
-        <MobileNav />
       </div>
     </header>
   );
