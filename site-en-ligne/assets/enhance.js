@@ -33,20 +33,8 @@
     px.on = true;
     px.q.splice(0).forEach(function (e) { track(e[0], e[1]); });
   };
-  if (SITE.pixel && !SITE.preview) {
-    var choice = store.get();
-    if (choice === "granted") loadPixel();
-    else if (choice !== "denied") {
-      var cb = document.createElement("div");
-      cb.setAttribute("role", "dialog"); cb.setAttribute("aria-label", "Cookies");
-      cb.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:560px;margin:0 auto;background:#fff;color:#222;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.2);padding:16px;font:14px/1.45 Figtree,system-ui,sans-serif";
-      cb.innerHTML = '<p style="margin:0 0 12px">Nous utilisons des cookies de mesure (Meta) pour savoir quelles publicités vous ont amené ici et améliorer nos annonces. <a href="confidentialite.html" style="text-decoration:underline">En savoir plus</a></p>' +
-        '<div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" data-c="denied" style="padding:10px 16px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;font-weight:600;cursor:pointer">Refuser</button>' +
-        '<button type="button" data-c="granted" style="padding:10px 16px;border-radius:10px;border:0;background:#222;color:#fff;font-weight:600;cursor:pointer">Accepter</button></div>';
-      cb.addEventListener("click", function (e) { var v = e.target.getAttribute && e.target.getAttribute("data-c"); if (!v) return; store.set(v); cb.remove(); if (v === "granted") loadPixel(); });
-      document.body.appendChild(cb);
-    }
-  }
+  // Pixel actif dès l'arrivée (sans bandeau) ; un visiteur peut le refuser depuis la page Confidentialité
+  if (SITE.pixel && !SITE.preview && store.get() !== "denied") loadPixel();
   // Page Confidentialité : boutons Accepter / Refuser
   if (/confidentialite/.test(location.pathname)) {
     $$("main button").forEach(function (b) {

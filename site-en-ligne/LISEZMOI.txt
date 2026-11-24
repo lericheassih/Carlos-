@@ -7,7 +7,7 @@ Aucun serveur ni base de données n'est nécessaire.
 - Accueil (vidéo), catalogue avec filtres (dates, voyageurs, quartier), fiches, visite photo, zoom.
 - Calendrier et prix total (nuit, semaine, 2 et 3 semaines, mois).
 - Bouton « Réserver » : ouvre WhatsApp avec le message déjà rédigé.
-- Pixel Meta (après accord du visiteur dans le bandeau cookies), dès qu'il est ajouté.
+- Pixel Meta 1188163112670746 actif dès l'arrivée (refus possible sur la page Confidentialité).
 
 LIMITES DE CETTE VERSION
 - Pas d'administration : pour changer un logement, un prix ou une photo, le site est regénéré puis republié.
