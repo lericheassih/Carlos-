@@ -188,7 +188,7 @@ export function BookingWidget({ apartment, whatsapp, companyName, preview, initi
       {q && nights > 0 && (
         <div className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm">
           <div className="flex justify-between"><span className="text-slate-600">{nights} nuit{nights > 1 ? "s" : ""}</span><span className="tabular-nums">{fcfa(q.baseTotal)}</span></div>
-          {q.savings > 0 && <div className="flex justify-between text-emerald-700"><span>{q.usesMonthly ? "Tarif mensuel" : q.usesWeekly ? "Tarif semaine" : apartment.pricing.promo_label || "Promotion"}</span><span className="tabular-nums">−{fcfa(q.savings)}</span></div>}
+          {q.savings > 0 && <div className="flex justify-between text-emerald-700"><span>{q.usesMonthly ? "Tarif mensuel" : q.usesWeekly ? "Tarif longue durée" : apartment.pricing.promo_label || "Promotion"}</span><span className="tabular-nums">−{fcfa(q.savings)}</span></div>}
           {q.fees.map((f) => <div key={f.label} className="flex justify-between"><span className="text-slate-600">{f.label}</span><span className="tabular-nums">{fcfa(f.amount)}</span></div>)}
           <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-semibold"><span>Total estimé</span><span className="tabular-nums">{fcfa(q.total)}</span></div>
         </div>

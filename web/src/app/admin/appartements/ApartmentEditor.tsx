@@ -30,7 +30,7 @@ type FormState = {
   name: string; slug: string; short_description: string; description: string; city: string; neighborhood: string; address: string;
   property_type: string; bedrooms: number; living_rooms: number; bathrooms: number; max_guests: number;
   latitude: string; longitude: string;
-  price_night: string; price_week: string; price_month: string; promo_price_night: string; promo_label: string;
+  price_night: string; price_week: string; price_2weeks: string; price_3weeks: string; price_month: string; promo_price_night: string; promo_label: string;
   promo_start: string; promo_end: string; extra_fees: ExtraFee[]; min_nights: number; pricing_conditions: string;
   booking_conditions: string; house_rules: string; check_in_time: string; check_out_time: string; featured: boolean;
 };
@@ -41,7 +41,7 @@ function initial(a: ApartmentRow | null): FormState {
     city: a?.city ?? "Lomé", neighborhood: a?.neighborhood ?? "", address: a?.address ?? "", property_type: a?.property_type ?? "appartement",
     bedrooms: a?.bedrooms ?? 1, living_rooms: a?.living_rooms ?? 1, bathrooms: a?.bathrooms ?? 1, max_guests: a?.max_guests ?? 2,
     latitude: a?.latitude?.toString() ?? "", longitude: a?.longitude?.toString() ?? "",
-    price_night: a ? String(a.price_night || "") : "", price_week: a?.price_week?.toString() ?? "", price_month: a?.price_month?.toString() ?? "",
+    price_night: a ? String(a.price_night || "") : "", price_week: a?.price_week?.toString() ?? "", price_2weeks: a?.price_2weeks?.toString() ?? "", price_3weeks: a?.price_3weeks?.toString() ?? "", price_month: a?.price_month?.toString() ?? "",
     promo_price_night: a?.promo_price_night?.toString() ?? "", promo_label: a?.promo_label ?? "", promo_start: a?.promo_start ?? "", promo_end: a?.promo_end ?? "",
     extra_fees: a?.extra_fees ?? [], min_nights: a?.min_nights ?? 1, pricing_conditions: a?.pricing_conditions ?? "",
     booking_conditions: a?.booking_conditions ?? "", house_rules: a?.house_rules ?? "",
@@ -233,13 +233,13 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
     const night = Number(f.price_night) || 0;
     if (!night) return null;
     const p = pricingFromRow({
-      price_night: night, price_week: Number(f.price_week) || null, price_month: Number(f.price_month) || null,
+      price_night: night, price_week: Number(f.price_week) || null, price_2weeks: Number(f.price_2weeks) || null, price_3weeks: Number(f.price_3weeks) || null, price_month: Number(f.price_month) || null,
       promo_price_night: Number(f.promo_price_night) || null, promo_label: f.promo_label, promo_start: f.promo_start || null, promo_end: f.promo_end || null,
       extra_fees: f.extra_fees, min_nights: f.min_nights, pricing_conditions: "",
     });
     const t = todayIso();
-    return [3, 7, 30].map((n) => ({ n, q: quoteStay(p, t, addDays(t, n), 2) }));
-  }, [f.price_night, f.price_week, f.price_month, f.promo_price_night, f.promo_label, f.promo_start, f.promo_end, f.extra_fees, f.min_nights]);
+    return [3, 7, 14, 21, 30].map((n) => ({ n, q: quoteStay(p, t, addDays(t, n), 2) }));
+  }, [f.price_night, f.price_week, f.price_2weeks, f.price_3weeks, f.price_month, f.promo_price_night, f.promo_label, f.promo_start, f.promo_end, f.extra_fees, f.min_nights]);
 
   const num = (k: "bedrooms" | "living_rooms" | "bathrooms" | "max_guests" | "min_nights", label: string, min = 0) => (
     <Field label={label} htmlFor={k}>
@@ -372,12 +372,14 @@ export function ApartmentEditor({ apartment, amenities: allAmenities, selectedAm
 
           {/* B. Tarification */}
           <Card>
-            <CardHeader title="Tarification" description="Montants en FCFA. Le meilleur tarif (nuit, semaine ou mois) est appliqué automatiquement au client." />
+            <CardHeader title="Tarification" description="Montants en FCFA. Le meilleur tarif (nuit, semaine, 2 ou 3 semaines, mois) est appliqué automatiquement au client." />
             <CardBody className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-3">
                 <Field label="Prix par nuit" htmlFor="pn" required><MoneyInput id="pn" value={f.price_night} onChange={(e) => set("price_night", e.target.value)} /></Field>
                 <Field label="Prix par semaine (7 nuits)" htmlFor="pw" help="Facultatif"><MoneyInput id="pw" value={f.price_week} onChange={(e) => set("price_week", e.target.value)} /></Field>
                 <Field label="Prix par mois (30 nuits)" htmlFor="pm" help="Facultatif"><MoneyInput id="pm" value={f.price_month} onChange={(e) => set("price_month", e.target.value)} /></Field>
+                <Field label="Prix pour 2 semaines (14 nuits)" htmlFor="pw2" help="Facultatif"><MoneyInput id="pw2" value={f.price_2weeks} onChange={(e) => set("price_2weeks", e.target.value)} /></Field>
+                <Field label="Prix pour 3 semaines (21 nuits)" htmlFor="pw3" help="Facultatif"><MoneyInput id="pw3" value={f.price_3weeks} onChange={(e) => set("price_3weeks", e.target.value)} /></Field>
               </div>
               <div className="rounded-xl border border-line p-4">
                 <div className="mb-3 text-[13px] font-semibold">Tarif promotionnel</div>

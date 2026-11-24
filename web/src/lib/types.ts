@@ -4,6 +4,10 @@ export type ExtraFee = { label: string; amount: number; per: "stay" | "night" | 
 export type Pricing = {
   night: number;
   week: number | null;
+  /** forfait 14 nuits */
+  week2?: number | null;
+  /** forfait 21 nuits */
+  week3?: number | null;
   month: number | null;
   promo_night: number | null;
   promo_label: string | null;
@@ -74,6 +78,8 @@ export type ApartmentRow = {
   longitude: number | null;
   price_night: number;
   price_week: number | null;
+  price_2weeks: number | null;
+  price_3weeks: number | null;
   price_month: number | null;
   promo_price_night: number | null;
   promo_label: string | null;

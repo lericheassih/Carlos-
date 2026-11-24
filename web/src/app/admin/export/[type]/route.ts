@@ -35,7 +35,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ type: stri
     const { data } = await supabase.from("payments").select("paid_at, amount, method, note, reservation:reservations(reference)").order("paid_at");
     rows = (data ?? []).map((p) => { const { reservation, ...rest } = p as unknown as Record<string, unknown> & { reservation: { reference: string } | null }; return { ...rest, reservation: reservation?.reference }; });
   } else if (type === "appartements") {
-    const { data } = await supabase.from("apartments").select("reference, name, slug, status, city, neighborhood, address, property_type, bedrooms, living_rooms, bathrooms, max_guests, price_night, price_week, price_month, promo_price_night, min_nights, created_at").order("reference");
+    const { data } = await supabase.from("apartments").select("reference, name, slug, status, city, neighborhood, address, property_type, bedrooms, living_rooms, bathrooms, max_guests, price_night, price_week, price_2weeks, price_3weeks, price_month, promo_price_night, min_nights, created_at").order("reference");
     rows = data ?? [];
   } else return NextResponse.json({ error: "unknown" }, { status: 404 });
   const date = new Date().toISOString().slice(0, 10);

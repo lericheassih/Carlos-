@@ -37,27 +37,38 @@ export function displayNightPrice(p: Pricing, today: string): { price: number; o
 
 /**
  * Calcule le prix d'un séjour. Le moteur choisit automatiquement la combinaison
- * la plus avantageuse pour le client entre nuits, semaines (7 nuits) et mois (30 nuits).
+ * la plus avantageuse pour le client entre nuits, semaine (7), 2 semaines (14), 3 semaines (21) et mois (30 nuits).
  */
 export function quoteStay(p: Pricing, checkIn: string, checkOut: string, guests = 1): Quote {
   const n = Math.max(0, diffDays(checkIn, checkOut));
   const rates: number[] = [];
   for (let i = 0; i < n; i++) rates.push(nightlyRate(p, addDays(checkIn, i)));
 
+  // Forfaits disponibles. Un forfait peut couvrir un séjour plus court que sa durée :
+  // le client ne paie jamais plus qu'un séjour plus long (ex. 25 nuits ≤ prix du mois).
+  const blocks = [
+    { len: 7, price: p.week, kind: "w" as const },
+    { len: 14, price: p.week2, kind: "w" as const },
+    { len: 21, price: p.week3, kind: "w" as const },
+    { len: 30, price: p.month, kind: "m" as const },
+  ].filter((b): b is { len: number; price: number; kind: "w" | "m" } => typeof b.price === "number" && b.price > 0);
   const cost: number[] = [0];
-  const choice: ("n" | "w" | "m")[] = [];
+  const choice: { len: number; kind: "n" | "w" | "m" }[] = [];
   for (let i = 1; i <= n; i++) {
     let best = cost[i - 1]! + rates[i - 1]!;
-    let c: "n" | "w" | "m" = "n";
-    if (p.week && p.week > 0 && i >= 7 && cost[i - 7]! + p.week < best) { best = cost[i - 7]! + p.week; c = "w"; }
-    if (p.month && p.month > 0 && i >= 30 && cost[i - 30]! + p.month < best) { best = cost[i - 30]! + p.month; c = "m"; }
+    let c: { len: number; kind: "n" | "w" | "m" } = { len: 1, kind: "n" };
+    for (const b of blocks) {
+      const v = cost[Math.max(0, i - b.len)]! + b.price;
+      if (v < best) { best = v; c = { len: b.len, kind: b.kind }; }
+    }
     cost[i] = best;
     choice[i] = c;
   }
   let usesWeekly = false, usesMonthly = false;
   for (let i = n; i > 0; ) {
-    const c = choice[i];
-    if (c === "m") { usesMonthly = true; i -= 30; } else if (c === "w") { usesWeekly = true; i -= 7; } else i -= 1;
+    const c = choice[i]!;
+    if (c.kind === "m") usesMonthly = true; else if (c.kind === "w") usesWeekly = true;
+    i -= c.len;
   }
 
   const stayTotal = cost[n] ?? 0;
@@ -88,12 +99,14 @@ export function quoteStay(p: Pricing, checkIn: string, checkOut: string, guests 
 }
 
 export function pricingFromRow(a: {
-  price_night: number; price_week: number | null; price_month: number | null; promo_price_night: number | null;
+  price_night: number; price_week: number | null; price_2weeks?: number | null; price_3weeks?: number | null; price_month: number | null; promo_price_night: number | null;
   promo_label: string | null; promo_start: string | null; promo_end: string | null; extra_fees: unknown; min_nights: number; pricing_conditions: string;
 }): Pricing {
   return {
     night: a.price_night,
     week: a.price_week,
+    week2: a.price_2weeks ?? null,
+    week3: a.price_3weeks ?? null,
     month: a.price_month,
     promo_night: a.promo_price_night,
     promo_label: a.promo_label,

@@ -22,6 +22,8 @@ export const ApartmentInput = z.object({
   longitude: optCoord(-180, 180),
   price_night: int,
   price_week: optInt,
+  price_2weeks: optInt,
+  price_3weeks: optInt,
   price_month: optInt,
   promo_price_night: optInt,
   promo_label: z.string().max(80).nullable().default(null),
